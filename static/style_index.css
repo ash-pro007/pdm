@@ -1,0 +1,221 @@
+
+
+body {
+    margin: 0;
+    background-image: url('../static/imgs/background_image_index.jpg');
+    background-repeat: no-repeat;
+
+}
+
+.logo-img {
+    width: 70px;
+}
+
+.main-logo-continer {
+    display: flex;
+
+}
+
+.main-logo-para {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 30px;
+    font-weight: 800;
+    margin-top: 0;
+    color: rgb(94, 175, 167);
+}
+
+
+.welcome-img {
+    width: 10%;
+    height: 10%;
+    margin-left: 20%;
+}
+
+.main-welcome-continer {
+    text-align: center;
+    display: flex;
+    width: 100%;
+    margin-top: 5rem;
+}
+
+.main-welcome-para {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 140px;
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: 0px;
+
+    color: rgb(114, 114, 114);
+}
+
+.welcome-para {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    margin-top: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    color: rgb(114, 114, 114);
+}
+
+.button-container {
+    width: fit-content;
+    margin-left: 50rem;
+    padding-left: 200px;
+}
+
+.button-main {
+    background-color: rgb(82, 209, 196);
+    color: aliceblue;
+    font-family: monospace;
+
+    font-size: 25px;
+    border-radius: 20px;
+    border-width: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10rem;
+    padding-right: 10rem; 
+}
+
+.container-signin-button {
+    width: 35rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 13%;    
+    text-align: center;
+
+    
+}
+
+.button-main:hover {
+    background-color: rgb(63, 214, 83);
+
+}
+
+
+
+.button-81 {
+    width: 35rem;
+    background-color: inherit;
+    border: 0 solid #e2e8f0;
+    border-radius: 1.5rem;
+    box-sizing: border-box;
+    color: #58b3a9;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Basier circle",-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 1.2rem;
+    font-weight: 600;
+    line-height: 1;
+    padding: 1rem 1.6rem;
+    text-align: center;
+    text-decoration: none #0d172a solid;
+    text-decoration-thickness: auto;
+    transition: all .1s cubic-bezier(.4, 0, .2, 1);
+    box-shadow: 0px 1px 2px rgba(166, 175, 195, 0.25);
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    
+}
+
+.button-81:hover {
+    transform: scale(.9);
+    opacity: .75;
+    background-color: #76d5cb;
+    color: #fff;
+}
+
+/* @media (min-width: 768px) {
+    .button-81 {
+    font-size: 1.125rem;
+    padding: 1rem 2rem;
+    }
+} */
+
+
+
+/* CSS Button 85 */
+
+.button-85 {
+    width: 35rem;
+    font-size: 1.2rem;
+    padding: 0.6em 2em;
+    border: none;
+    outline: none;
+    color: rgb(10, 239, 247);
+    background: inherit;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 1.5rem;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+.button-85:before {
+    content: "";
+    background: linear-gradient(
+    45deg,
+    #13ffd8,
+    #34ffdd,
+    #56ffe3,
+    #00ffd5,
+    #00ffd5,
+    #7dfff8,
+    #95f3ff,
+    #c4f8ff,
+    #fbffff,
+    #4dffe1
+    );
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing-button-85 20s linear infinite;
+    transition: opacity 0.3s ease-in-out;
+    border-radius: 1.5rem;
+}
+
+@keyframes glowing-button-85 {
+    0% {
+    background-position: 0 0;
+    }
+    50% {
+    background-position: 400% 0;
+    }
+    100% {
+    background-position: 0 0;
+    }
+}
+
+.button-85:after {
+    z-index: -1;
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /* background: rgb(255, 255, 255, 0.82); */
+    /* background: #ffffff; */
+    background: inherit;
+    left: 0;
+    top: 0;
+    border-radius: 1.5rem;
+}
+
+.button-85:hover {
+    background-color: #76d5cb;
+    color: #fff;
+}
+
+
+a { color: inherit; } 
+
+

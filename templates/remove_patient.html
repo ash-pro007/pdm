@@ -1,0 +1,231 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Patient</title>
+
+    <link rel="stylesheet" href="{% static 'style_remove_patient.css' %}">
+    <link rel="stylesheet" href="{% static 'style_base_components.css' %}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" 
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+          crossorigin="anonymous">
+
+     <!-- ---------------- from w3 school for icons ---------------- -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+ 
+ 
+
+    <style>
+        a:hover { text-decoration: none; }
+
+    </style>
+</head>
+<body>
+
+    {% csrf_token %}
+
+    <!-- ------------------------- Nav bar -------------------------  -->
+
+    <!-- <nav class="hc-navbar">
+        <div class="hc-navbar-container">
+            <a href="#" class="hc-navbar-brand">Patient Data Manager PDM</a>
+            <button class="hc-navbar-toggler" onclick="toggleMenu()">&#9776;</button>
+            <div class="hc-navbar-menu" id="navbarMenu">
+                <a href="home" class="hc-navbar-item">Home</a>
+                <a href="#" onclick="showForm()" class="hc-navbar-item">Remove</a>
+             
+             
+             ------------   <a href="#" onclick="showForm()" class="hc-navbar-item">Remove patient -</a>
+                <a style="color: white;" id="btn-search-patient" onclick="searchPatient()" class="hc-navbar-item"> Search Patient  &#128269</a>
+
+                <form class="form-search-patient" id="inpt-search-patient" action="{% url 'show_searched_patient' %}" method="post">
+                    <input class="input-form-search" type="text" id="searched_name" name="searched_name" placeholder="Search Patient">
+                    <button class="navg-buttons btn-form-search-patient" type="submit">Search</button>   
+                </form> ------------
+
+                <a href="#" class="hc-navbar-item">About</a>
+
+            </div>
+        </div>
+    </nav> -->
+
+
+
+
+    <nav class="hc-navbar">
+        <div class="hc-navbar-container">
+            <a href="home" class="hc-navbar-brand">PDM</a>
+            <button class="hc-navbar-toggler" onclick="toggleMenu()">&#9776;</button>
+            <div class="hc-navbar-menu" id="navbarMenu">
+
+                <a href="home" class="hc-navbar-item">Home  <i class="fa fa-home" style="font-size:15px"></i></a>
+                
+                <a style="color: white;" id="btn-search-patient" onclick="searchPatient()" class="hc-navbar-item"> Search Patient  &#128269</a>
+    
+                <form class="form-search-patient" id="inpt-search-patient" action="{% url 'show_searched_patient_for_remove_patient' %}" method="post">
+                    {% csrf_token %}
+                    
+                    <input class="input-form-search" type="text" id="searched_name" name="searched_name" placeholder="Search Patient">
+                    <button class="navg-buttons btn-form-search-patient" type="submit">Search</button>   
+                </form>
+
+                <a href="#" class="hc-navbar-item">About</a>
+
+                <a style="margin-left: 5rem;" href="signout" class="hc-navbar-item">Logout <i class="fa fa-sign-out" style="font-size:15px"></i></a>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- ---------------------- Nav bar ends ------------------------ -->
+
+    <!-- --------------------- List for patient --------------------- -->
+
+    <div class="container-gridView-div" id="grid-view-container" >
+
+        <table class="table">
+            <thead class="patient-data-thead"> 
+                <tr>
+                    <th>S No.</th>
+                    <th>Photo</th>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Contact N0.</th>
+                    <th>Gender</th>
+                    <th>Dob</th>
+                    <th>Problem</th>
+               
+                    <th>Other Detail</th>
+                    <th>Add treatment details</th>
+                </tr>
+            </thead>
+
+
+            <!-- this is seached patient row will only be visible when uesr search for patient -->
+            
+            {% for patient in list_of_matched_patient %}  
+                            
+            <tr class="table-row-grid-searched-patient searched-patient">
+                <th scope="row">0</th>
+                <td> 
+                    {% if patient.img.url != ''  %}
+                        <img class="patient-pi-grid" src="{{ patient.img.url }}" >
+
+                    {% else  %}
+                        <img class="patient-pi-grid" src="../static/imgs/default_patient_img.jpg" alt="">
+                    {% endif %}
+
+                </td>
+                <td>{{ patient.id }}</td>
+                <td>{{patient.name}}</td>
+                <td>{{ patient.contact_no}}</td>
+                <td>
+                    {% if patient.gender == 'm'  %}
+                    Male
+                    {% elif patient.gender == 'f'  %}
+                        Female
+                    {% else %} 
+                        Other
+                    {% endif %}
+                </td>
+                <td>{{ patient.dob }}</td>
+                <td>{{ patient.problem }}</td>
+        
+                <td>{{ patient.other_details }}</td>
+
+                <td>
+                    <div class="div-click-to-go">
+                        {% csrf_token %}
+        
+                        <form action="remove_patient_from_db" method="post">
+                            {% csrf_token %}
+                            <input style="display:none" type="text" id="patient_id_in" name="patient_id_in" value="{{ patient.id }}">
+                            <button class="remove_patient-btn" type="submit" onclick="return confirm('Are you sure?');">Remove</button>  
+                        </form>
+                    </div>
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+
+
+        <!-- --------------------------- Search row ends ---------------------------------- -->
+
+
+            <tbody class="patient-data-tbody">
+                {% for patient in patients_list %}  
+                <tr class="table-row-grid-searched-patient">
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td> 
+                        {% if patient.img.url != ''  %}
+                            <img class="patient-pi-grid" src="{{ patient.img.url }}" >
+
+                        {% else  %}
+                            <img class="patient-pi-grid" src="../static/imgs/default_patient_img.jpg" alt="">
+                        {% endif %}
+
+                    </td>
+                    <td>{{ patient.id }}</td>
+                    <td>{{patient.name}}</td>
+                    <td>{{ patient.contact_no}}</td>
+                    <td>
+                        {% if patient.gender == 'm'  %}
+                        Male
+                        {% elif patient.gender == 'f'  %}
+                            Female
+                        {% else %} 
+                            Other
+                        {% endif %}
+                    </td>
+                    <td>{{ patient.dob }}</td>
+                    <td>{{ patient.problem }}</td>
+              
+                    <td>{{ patient.other_details }}</td>
+    
+                    <td>
+                        <div class="div-click-to-go">
+                            {% csrf_token %}
+            
+                            <form action="remove_patient_from_db" method="post">
+                                {% csrf_token %}
+                                <input style="display:none" type="text" id="patient_id_in" name="patient_id_in" value="{{ patient.id }}">
+                                <button class="remove_patient-btn" type="submit" onclick="return confirm('Are you sure?');">Remove</button>   
+                            </form>
+                        </div>
+                    </td>
+    
+                </tr>
+                   
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+
+    </div>
+
+
+    <!-- ------------------- List for patient ends------------------- -->
+
+    <script>
+
+        function searchPatient() {
+            document.getElementById('btn-search-patient').style.display = 'none';
+            document.getElementById('inpt-search-patient').style.display = 'block';
+
+            console.log('search button is working..............')
+        }
+
+    </script>
+    
+</body>
+</html>

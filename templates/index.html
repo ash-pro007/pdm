@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="{% static 'style_index.css' %}">
+    <link rel="stylesheet" href="{% static 'style_base_components.css' %}">
+</head>
+
+
+<body>
+    <div class="main-logo-continer">
+        <img class="logo-img" src="../static/imgs/medical_sign_png.png" alt="">
+        <p class="main-logo-para" >P D M</p>
+    </div>
+
+    <div class="main-welcome-continer">
+        <img class="welcome-img" src="../static/imgs/hand_wave.png" alt="">
+        <p class="main-welcome-para" >Welcome</p>
+    </div>
+    <p class="welcome-para" >Manage patient's Data 24x7</p>
+
+    <div class="container-signin-button">
+        <!-- <button class="button-main"><a href="signin">SIGNIN</a></button> -->
+        <a href="signin"><button class="shadow-btn" role="button">LOGIN</button></a>
+        <!-- <a href="signin"><button class="button-85" role="button">LOGIN</button></a> -->
+    </div>
+</body>
+</html>

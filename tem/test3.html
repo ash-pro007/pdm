@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Responsive Navigation Bar</title>
+    <style>
+        /* styles.css */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+.navbar {
+    background-color: #47b3a8;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 10px;
+}
+
+.navbar-brand {
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    animation: slideIn 1s ease-in-out;
+}
+
+.navbar-toggler {
+    display: none;
+    font-size: 24px;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.navbar-menu {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex: 1;
+    transition: transform 0.3s ease-in-out;
+}
+
+.navbar-item {
+    color: #fff;
+    text-decoration: none;
+    padding: 14px 20px;
+    position: relative;
+    transition: color 0.3s;
+    font-weight: 500;
+}
+
+.navbar-item::before {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #e74c3c;
+    transition: width 0.3s, left 0.3s;
+}
+
+.navbar-item:hover::before {
+    width: 100%;
+    left: 0;
+}
+
+.navbar-item:hover {
+    color: #e74c3c;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .navbar-toggler {
+        display: block;
+    }
+
+    .navbar-menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+    }
+
+    .navbar-menu.active {
+        display: flex;
+        transform: translateY(0);
+    }
+
+    .navbar-item {
+        width: 100%;
+        text-align: center;
+        padding: 14px 0;
+    }
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-brand">MyWebsite</a>
+            <button class="navbar-toggler" onclick="toggleMenu()">&#9776;</button>
+            <div class="navbar-menu" id="navbarMenu">
+                <a href="#" class="navbar-item">Home</a>
+                <a href="#" class="navbar-item">About</a>
+                <a href="#" class="navbar-item">Services</a>
+                <a href="#" class="navbar-item">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navbarMenu');
+            menu.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

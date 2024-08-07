@@ -1,0 +1,389 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="{% static 'style_patient_details.css' %}">
+    <link rel="stylesheet" href="{% static 'style_base_components.css' %}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" 
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+    crossorigin="anonymous">
+    
+    <style>
+        a:hover { text-decoration: none; }
+        
+        a {
+            outline: none;
+        }
+    </style>
+
+</head>
+<body>
+
+    <!-- ------------------------- Nav bar -------------------------  -->
+
+    <nav class="hc-navbar">
+        <div class="hc-navbar-container">
+            <a href="#" class="hc-navbar-brand">Patient Data Manager PDM</a>
+            <button class="hc-navbar-toggler" onclick="toggleMenu()">&#9776;</button>
+            <div class="hc-navbar-menu" id="navbarMenu">
+                <a href="home" class="hc-navbar-item">Home</a>
+                <a href="#" onclick="showForm()" class="hc-navbar-item">Add treatment for patient</a>
+                <a href="#" class="hc-navbar-item">About</a>
+            
+        
+            </div>
+        </div>
+    </nav>
+
+    <!-- ---------------------- Nav bar ends ------------------------ -->\
+
+    
+    <!-- ---------------------- Form to Change Patient's details ---------------------- -->
+    
+    <div id="change-patient-details-form" class="div-patient-register" style="display: none;" >
+        <div class="registrion-form-heading">Change Patient's details</div>
+        <form  action="{% url 'change_patient_details' %}" method="post" enctype="multipart/form-data" onsubmit="disableButton();" class="form-container-formm">
+            {% csrf_token %}
+
+            <input type="text" style="display: none;" value="{{ patient.id }}" id="patient_id_to_change_data" name="patient_id_to_change_data">
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Patient Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter patient name here" value="{{ patient.name }}">
+            </div>
+       
+            <div >
+                <label  class="form-label" for="cars">Gender</label>
+                <select  class="btn btn-primary dropdown-toggle" name="gender" id="gender" selected="selected">
+
+                    <option value="">
+                        {% if patient.gender == 'm'  %}
+                            Male
+                        {% elif patient.gender == 'f'  %}
+                            Female
+                        {% else %} 
+                            Other
+                        {% endif %}
+                    </option>
+                    <option value="m">Male</option>
+                    <option value="f">Female</option>
+                    <option value="o">Other</option>
+                </select>
+                <br><br>
+            </div>
+
+            <div  class="mb-3">
+                <label for="startDate">Data of Birth:  {{ patient.dob }}</label>
+                <input id="dob" name="dob" class="form-control" type="date" value="{{ dob }}"/>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Seeing Doctor for</label>
+                <input class="form-control" id="problem" name="problem" rows="3" value="{{ patient.problem }}"></input>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Medical History</label>
+                <input class="form-control" id="medical_history" name="medical_history" rows="3" value="{{ patient.medical_history }}"></input>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Operation History</label>
+                <input class="form-control" id="operation_history" name="operation_history" rows="3" value="{{ patient.operation_history }}"></input>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Other detials</label>
+                <input class="form-control" id="other_details" name="other_details" rows="3" value="{{ patient.other_details }}"></input>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Contact no.</label>
+                <input type="text" class="form-control" id="contact_no" name="contact_no" value=" {{ patient.contact_no }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Patient's profile picture</label>
+                <input class="form-control" type="file" id="img" name="img">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Change Patient Details</button>
+        </form>
+
+        <div class="btn-hide-regis-form">
+            <button type="clear" onclick="showChangePatientForm()" class="btn btn-primary mb-4 btn-hide-regis-form">Cancel</button>
+        </div>
+    </div>
+
+    <!-- ---------------------- Form to change patient details ends here ---------------------- -->
+    
+
+
+    <!-- ---------------------- Some message here ---------------------- -->
+
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert"> 
+        <strong>Message: </strong> {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"> 
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    {% endfor %}
+
+    <!-- ---------------------- Message ends here ---------------------- -->
+
+
+    <div class="main-container">
+
+        <div  class="main-div-forl column" id="{{ patient.id }}">
+            <div class="div-heading">{{ patient.name }}</div>
+            <hr>
+            <!-- this div contains the 2 div in which 1st div contains information and 2nd contains img -->
+            <div class="div-div-img-horizontal"> 
+                
+                <div >
+                    <table class="table">
+                        <tr >
+                            <th class="field-headings">Id</th>
+                            <td class="field-values">{{ patient.id }}</td>
+                        </tr>
+                        <tr >
+                            <th class="field-headings">Name</th>
+                            <td class="field-values">{{ patient.name }}</td>
+                        </tr>
+                        <tr >
+                            <th class="field-headings">Contact No. </th>
+                            <td class="field-values">  {{ patient.contact_no }}</td>
+                        </tr>
+                        <tr >
+                            <th class="field-headings">Gender</th>
+                            <td class="field-values">
+                                {% if patient.gender == 'm'  %}
+                                    Male
+                                {% elif patient.gender == 'f'  %}
+                                    Female
+                                {% else %} 
+                                    Other
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr >
+                            <th class="field-headings">Dob</th>
+                            <td class="field-values">{{ patient.dob }}</td>
+                        </tr>
+                    </table>
+                    <!-- <div>contact no: 018318230</div>
+                    <div>gender: male</div>
+                    <div>age: 20 years </div> -->
+                    
+                </div>
+                <div >
+                    
+                        {% if patient.img.url != ''  %}
+                            <img class="patient-pi" src="{{ patient.img.url }}" >
+
+                        {% else  %}
+                            <img class="patient-pi" src="../static/imgs/default_patient_img.jpg" alt="">
+                        {% endif %}
+
+                    
+                </div>
+            </div>
+    
+            <table class="table">
+                <tr >
+                    <th class="field-headings">Problem</th>
+                    <td class="field-values">{{ patient.problem }}</td>
+                </tr>
+                <tr >
+                    <th class="field-headings">Medical History: </th>
+                    <td class="field-values">{{ patient.medical_history }}</td>
+                </tr>
+                <tr >
+                    <th class="field-headings">Operation History: </th>
+                    <td class="field-values">{{ patient.operation_history }}</td>
+                </tr>
+                <tr >
+                    <th class="field-headings">Other details: </th>
+                    <td class="field-values">{{ patient.other_details }}</td>
+                </tr>
+            </table>
+    
+            <div class="div-click-to-go">
+                {% csrf_token %}
+    
+              
+                <a class="shadow-btn-2" onclick="showChangePatientForm()"><u>Click on Profile to edit</u></a>   
+              
+            </div>
+    
+        </div>
+
+        <div class="upper-conatiner-all-treatment-details">
+
+            <h3 class="heading-all-details">All treatemnt details</h3>
+            {% for detail in patient_all_treatment_details %}
+
+                <div class="conatiner-all-treatment-details">
+
+                    
+
+                    <table class="table">
+                        <tr>
+                            <th>Treatment no.</th>
+                            <td>{{ detail.n_th_treatment }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Problem in detail</th>
+                            <td>{{ detail.problem_detail }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Medicine prescribed</th>
+                            <td>{{ detail.medicine_prescribed }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Date on treatemnt given</th>
+                            <td>{{ detail.current_checkup_date }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Next checkup date give</th>
+                            <td>{{ detail.next_checkup_date }}</td>
+                        </tr>
+
+                    </table>
+
+                </div>
+
+                {% endfor %}
+        </div>
+       
+
+       
+    </div>
+
+
+     <!-- ------------------------ Add treatment details ------------------------ -->
+    
+     <div id="patient-treatment-detail-form" class="div-patient-treatment" style="display: none;" >
+        <div class="registrion-form-heading">Patient Treatment</div>
+            <form  action="{% url 'save_treatment_details' %}" method="post" enctype="multipart/form-data" onsubmit="disableButton();" class="form-container-formm">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Patient Name: {{ patient.name }} </label>
+                </div>
+        
+                <div >
+                    <label  class="form-label" >Id: {{ patient.id }}</label>
+                </div>
+
+                <div >
+                    <label  class="form-label" >Treatment no. : {{ treatment_no }}</label>
+                </div>
+                
+
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Problem in detail</label>
+                    <input class="form-control" id="problem" name="problem" rows="3"></input>
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Treatment given</label>
+                    <input class="form-control" id="treatment_given" name="treatment_given" rows="3"></input>
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Medicine Prescribed</label>
+                    <input class="form-control" id="medicine_prescribed" name="medicine_prescribed" rows="3"></input>
+                </div>
+
+                <div  class="mb-3">
+                    <label for="startDate">Current check date</label>
+                    <input id="current_checkup_date" name="current_checkup_date" class="form-control"  type="date" required />
+                </div>
+
+                <div  class="mb-3">
+                    <label for="startDate">Next check up date</label>
+                    <input id="next_checkup" name="next_checkup" class="form-control" type="date" required />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+        <button type="clear" onclick="hideForm()" class="btn btn-primary mb-4">Hide form</button>
+    </div>
+
+
+
+    <!-- --------------------- Add treatment details ends ---------------------- -->
+
+
+    <script>
+
+        let isPatientTreatmentForm = false
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") { // Or event.keyCode === 27
+              // Code to execute when the Escape key is pressed
+              document.getElementById('patient-treatment-detail-form').style.display = 'none';
+            }
+        });
+
+        function showForm() {
+            if (isPatientTreatmentForm) {
+                document.getElementById('patient-treatment-detail-form').style.display = 'none';
+                isPatientTreatmentForm = false
+            }
+            else {
+                document.getElementById('patient-treatment-detail-form').style.display = 'block';
+                isPatientTreatmentForm = true
+            }
+        }
+
+
+        isChangePatientFormVisible = false
+        function showChangePatientForm() {
+            if (isChangePatientFormVisible) {
+                document.getElementById('change-patient-details-form').style.display = 'none';
+                isChangePatientFormVisible = false
+            }
+            else {
+                document.getElementById('change-patient-details-form').style.display = 'block';
+                isChangePatientFormVisible = true
+            }
+        }
+
+
+    </script>
+
+    <!-- Bootstrap boiler plate -->
+
+    <script 
+        src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous">
+    </script>
+    <script 
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" 
+        crossorigin="anonymous">
+    </script>
+    <script 
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" 
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous">
+    </script>
+
+    <!-- Bootstrap ends here -->
+
+</body>
+</html>

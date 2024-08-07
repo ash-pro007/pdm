@@ -1,0 +1,341 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'style_home.css' %}">
+    <link rel="stylesheet" href="{% static 'style_base_components.css' %}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" 
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+          crossorigin="anonymous">
+
+
+    <!-- ---------------- from w3 school for icons ---------------- -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    <style>
+        a:hover { text-decoration: none; }
+        
+    </style>
+   
+</head>
+<body>
+
+    {% csrf_token %}
+
+    <!-- ------------------------- Nav bar -------------------------  -->
+    <nav class="hc-navbar">
+        <div class="hc-navbar-container">
+            <a href="home" class="hc-navbar-brand">PDM</a>
+            <button class="hc-navbar-toggler" onclick="toggleMenu()">&#9776;</button>
+            <div class="hc-navbar-menu" id="navbarMenu">
+
+                
+                <a herf="home" style="color: #f44336; font-weight: 500;"  class="hc-navbar-item">Home <i class="fa fa-home" style="font-size:15px"></i></a>
+                <a href="#" onclick="showForm()" class="hc-navbar-item">Add New Patient  +</i> </a>
+                <a href=" {% url 'remove_patient' %}" class="hc-navbar-item">Remove patient  <i class="material-icons" style="font-size:14px">remove_circle_outline</i>  </a>
+                <a style="color: white;" id="btn-search-patient" onclick="searchPatient()" class="hc-navbar-item"> Search Patient  &#128269</a>
+    
+                <form class="form-search-patient" id="inpt-search-patient" action="{% url 'show_searched_patient' %}" method="post">
+                    {% csrf_token %}
+                    
+                    <input class="input-form-search" type="text" id="searched_name" name="searched_name" placeholder="Search Patient">
+                    <button class="navg-buttons btn-form-search-patient" type="submit">Search</button>   
+                </form>
+
+                <a href="#" class="hc-navbar-item">About</a>
+
+                <a style="margin-left: 5rem;" href="signout" class="hc-navbar-item">Logout <i class="fa fa-sign-out" style="font-size:15px"></i></a>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- ---------------------- Nav bar ends ------------------------ -->
+
+    <!-- ---------------------- Some message here ---------------------- -->
+
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert"> 
+        <strong>Message: </strong> {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"> 
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    {% endfor %}
+
+    <!-- ---------------------- Message ends here ---------------------- -->
+
+    <!-- ---------------------- Form to register Patient ---------------------- -->
+    
+    <div id="patient-registration-form" class="div-patient-register" style="display: none;" >
+        <div class="registrion-form-heading">Patient Regisration</div>
+        <form  action="{% url 'register_patient' %}" method="post" enctype="multipart/form-data" onsubmit="disableButton();" class="form-container-formm">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Patient Name</label>
+                <input type="text" class="form-control" id="name" name="name" placeholder="Enter patient name here">
+            </div>
+       
+            <div >
+                <label  class="form-label" for="cars">Gender</label>
+                <select  class="btn btn-primary dropdown-toggle" name="gender" id="gender">
+                    <option value="m">Male</option>
+                    <option value="f">Female</option>
+                    <option value="o">Other</option>
+                </select>
+                <br><br>
+            </div>
+
+            <div  class="mb-3">
+                <label for="startDate">Data of Birth</label>
+                <input id="dob" name="dob" class="form-control" type="date" />
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Seeing Doctor for</label>
+                <input class="form-control" id="problem" name="problem" rows="3"></input>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Medical History</label>
+                <input class="form-control" id="medical_history" name="medical_history" rows="3"></input>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Operation History</label>
+                <input class="form-control" id="operation_history" name="operation_history" rows="3"></input>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Other detials</label>
+                <input class="form-control" id="other_details" name="other_details" rows="3"></input>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Contact no.</label>
+                <input type="text" class="form-control" id="contact_no" name="contact_no" placeholder="Enter patient name here">
+            </div>
+
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Patient's profile picture</label>
+                <input class="form-control" type="file" id="img" name="img">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <div class="btn-hide-regis-form">
+            <button type="clear" onclick="hideForm()" class="btn btn-primary mb-4 btn-hide-regis-form">Cancel</button>
+        </div>
+    </div>
+
+    <!-- ---------------------- Form ends here ---------------------- -->
+
+    <div class="container-gridView-div" id="grid-view-container" >
+
+        <table class="table">
+            <thead class="patient-data-thead"> 
+                <tr>
+                    <th>S No.</th>
+                    <th>Photo</th>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Contact N0.</th>
+                    <th>Gender</th>
+                    <th>Dob</th>
+                    <th>Problem</th>
+               
+                    <th>Other Detail</th>
+                    <th>Add treatment details</th>
+                </tr>
+            </thead>
+
+
+            <tbody class="patient-data-tbody">
+
+
+                <!-- this is seached patient row will only be visible when uesr search for patient -->
+            
+                {% for patient in list_of_matched_patient %}  
+                            
+                    <tr class="table-row-grid-searched-patient searched-patient">
+                        <th scope="row">0</th>
+                        <td> 
+                            {% if patient.img.url != ''  %}
+                                <img class="patient-pi-grid" src="{{ patient.img.url }}" >
+
+                            {% else  %}
+                                <img class="patient-pi-grid" src="../static/imgs/default_patient_img.jpg" alt="">
+                            {% endif %}
+
+                        </td>
+                        <td>{{ patient.id }}</td>
+                        <td>{{patient.name}}</td>
+                        <td>{{ patient.contact_no}}</td>
+                        <td>
+                            {% if patient.gender == 'm'  %}
+                            Male
+                            {% elif patient.gender == 'f'  %}
+                                Female
+                            {% else %} 
+                                Other
+                            {% endif %}
+                        </td>
+                        <td>{{ patient.dob }}</td>
+                        <td>{{ patient.problem }}</td>
+                
+                        <td>{{ patient.other_details }}</td>
+        
+                        <td>
+                            <div class="div-click-to-go">
+                                {% csrf_token %}
+                
+                                <form action="patient_details" method="post">
+                                    {% csrf_token %}
+                                    <input style="display:none" type="text" id="patient_id_in" name="patient_id_in" value="{{ patient.id }}">
+                                    <button class="shadow-btn-2" type="submit">Add treatment deatils</button>   
+                                </form>
+                            </div>
+                        </td>
+        
+                    </tr>
+
+                {% endfor %}
+
+
+
+                <!-- --------------------------- Search row ends ---------------------------------- -->
+
+                {% for patient in patients_list %}  
+                <tr class="table-row-grid-searched-patient">
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td> 
+                        {% if patient.img.url != ''  %}
+                            <img class="patient-pi-grid" src="{{ patient.img.url }}" >
+
+                        {% else  %}
+                            <img class="patient-pi-grid" src="../static/imgs/default_patient_img.jpg" alt="">
+                        {% endif %}
+
+                    </td>
+                    <td>{{ patient.id }}</td>
+                    <td>{{patient.name}}</td>
+                    <td>{{ patient.contact_no}}</td>
+                    <td>
+                        {% if patient.gender == 'm'  %}
+                        Male
+                        {% elif patient.gender == 'f'  %}
+                            Female
+                        {% else %} 
+                            Other
+                        {% endif %}
+                    </td>
+                    <td>{{ patient.dob }}</td>
+                    <td>{{ patient.problem }}</td>
+              
+                    <td>{{ patient.other_details }}</td>
+    
+                    <td>
+                        <div class="div-click-to-go">
+                            {% csrf_token %}
+            
+                            <form action="patient_details" method="post">
+                                {% csrf_token %}
+                                <input style="display:none" type="text" id="patient_id_in" name="patient_id_in" value="{{ patient.id }}">
+                                <button class="shadow-btn-2" type="submit">Add treatment deatils</button>   
+                            </form>
+                        </div>
+                    </td>
+    
+                </tr>
+                   
+                {% endfor %}
+            </tbody>
+
+        </table>
+
+
+    </div>
+
+
+     
+
+    <!--  ------------------------- Scripts -------------------------  -->
+
+    <script>
+
+        let isRegistrationFormVisible = false
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") { // Or event.keyCode === 27
+              // Code to execute when the Escape key is pressed
+              document.getElementById('patient-registration-form').style.display = 'none';
+            }
+          });
+
+        function showForm() {
+            if (isRegistrationFormVisible) {
+                document.getElementById('patient-registration-form').style.display = 'none';
+                isRegistrationFormVisible = false
+            }
+            else {
+                document.getElementById('patient-registration-form').style.display = 'block';
+                isRegistrationFormVisible = true
+            }
+        }
+
+        function hideForm() {
+            document.getElementById('patient-registration-form').style.display = 'none';
+        }
+
+
+        function searchPatient() {
+            document.getElementById('btn-search-patient').style.display = 'none';
+            document.getElementById('inpt-search-patient').style.display = 'block';
+
+            console.log('search button is working..............')
+        }
+
+    </script>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('navbarMenu');
+            menu.classList.toggle('active');
+        }
+    </script>
+
+
+    <!-- Bootstrap boiler plate -->
+
+    <script 
+        src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous">
+    </script>
+    <script 
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" 
+        crossorigin="anonymous">
+    </script>
+    <script 
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" 
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous">
+    </script>
+
+    <!-- Bootstrap ends here -->
+
+</body>
+</html>
