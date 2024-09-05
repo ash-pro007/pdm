@@ -52,7 +52,7 @@
     display: inline-block;
     font-family: "Basier circle",-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     font-size: .8rem;
-    font-weight: 400;
+    font-weight: 600;
     line-height: 1;
     padding: 0.7rem 0.5rem;
     text-align: center;
@@ -81,6 +81,87 @@
 
 }
 
+
+
+/* ----------------- from css ----------------- */
+
+.div-form-container {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(172, 172, 172); /* Fallback color */
+    background-color: rgba(211, 210, 210, 0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+.form-heading {
+    color: rgb(56, 56, 56);
+    background-color: white;
+    font-weight: bold;
+    font-size: 3rem;
+    margin-bottom: 3%;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Modal Content/Box */
+.form-container-formm {
+    background-color: #fefefe;
+    margin: 5% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border-width: 0px;
+    width: 80%; /* Could be more or less, depending on screen size */
+    max-width: 600px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+}
+
+/* Add Animation */
+@keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+}
+
+/* The Close Button */
+.form-container-formm button[type="button"] {
+    background-color: #f44336;
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    cursor: pointer;
+    width: auto;
+    margin: 8px 0;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.form-container-formm button[type="button"]:hover {
+    background-color: #d32f2f;
+}
+
+.btn-submit-regis-form {
+    margin-top: 3%;
+    margin-bottom: 3%;
+    width: 100%;
+}
+
+.btn-hide-regis-form {          
+    width: 50%;
+    text-align: center;
+    margin-left: 20%;
+
+}
+
+
+/* --------------- from css ends --------------- */
 
 
 
@@ -255,3 +336,11 @@
 
 
 /* --------------- Searching patient fuctionality  ends ---------------- */
+
+
+
+/* --------------- Form ---------------  */
+
+
+/* ------------- Form ends -------------  */
+

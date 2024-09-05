@@ -78,8 +78,8 @@
 
     <!-- ---------------------- Form to register Patient ---------------------- -->
     
-    <div id="patient-registration-form" class="div-patient-register" style="display: none;" >
-        <div class="registrion-form-heading">Patient Regisration</div>
+    <div id="patient-registration-form" class="div-form-container" style="display: none;" >
+        <div class="form-heading">Patient Regisration</div>
         <form  action="{% url 'register_patient' %}" method="post" enctype="multipart/form-data" onsubmit="disableButton();" class="form-container-formm">
             {% csrf_token %}
             <div class="mb-3">
@@ -87,7 +87,7 @@
                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter patient name here">
             </div>
        
-            <div >
+            <div class="mbt-3" style="margin-top: 30px;">
                 <label  class="form-label" for="cars">Gender</label>
                 <select  class="btn btn-primary dropdown-toggle" name="gender" id="gender">
                     <option value="m">Male</option>
@@ -132,7 +132,7 @@
                 <input class="form-control" type="file" id="img" name="img">
             </div>
 
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary btn-submit-regis-form">Submit</button>
         </form>
 
         <div class="btn-hide-regis-form">
@@ -154,7 +154,7 @@
                     <th>Contact N0.</th>
                     <th>Gender</th>
                     <th>Dob</th>
-                    <th>Problem</th>
+                    <th>Diagnos</th>
                
                     <th>Other Detail</th>
                     <th>Add treatment details</th>

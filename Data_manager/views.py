@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import Patient, Patient_treatment_details
 from django.contrib.auth import logout
 from django.shortcuts import redirect
+import os
 
 user = ''
 
@@ -98,7 +99,102 @@ def register_patient(request):
     return render(request, 'home.html', {'patients_list': patients})
 
 
+def change_patient_details(request):
+    if request.method == "POST":
+        id = request.POST['patient_id_to_change_data']
 
+        name = request.POST['name']
+        gender = request.POST['gender']
+        dob = request.POST['dob']
+        problem = request.POST['problem']
+        medical_history = request.POST['medical_history']
+        operation_history = request.POST['operation_history']
+        other_details = request.POST['other_details']
+        contact_no = request.POST['contact_no']
+
+        is_img_changed = True
+
+
+        try:
+            img = request.FILES['img']
+        except:
+            img = ''
+
+
+        # select query
+
+        pat = Patient.objects.raw(f"""SELECT * FROM public."Data_manager_patient"  WHERE id = '{ patient_id }'  """) 
+        for i in pat:
+            if name == '' or name == None:
+                name = i.name
+            
+            if gender == '' or gender == None:
+                gender = i.gender
+
+            if dob == '' or dob == None:
+                dob = i.dob
+
+            if problem == '' or problem == None:
+                problem = i.problem
+
+            if medical_history == '' or medical_history == None:
+                medical_history = i.medical_history
+
+            if operation_history == '' or operation_history == None:
+                operation_history = i.operation_history
+
+            if other_details == '' or other_details == None:
+                other_details = i.other_details
+
+            if contact_no == '' or contact_no == None:
+                contact_no = i.contact_no
+
+            if name == '' or name == None:
+                name = i.name
+            
+            if img == '' or img == None:
+                img = i.img
+                is_img_changed = False
+        
+
+        # change_query = f""" UPDATE public."Data_manager_patient" SET name='{name}', img='{img}', gender='{gender}', dob='{dob}', problem='{problem}', medical_history='{medical_history}',
+        #                         operation_history='{operation_history}', other_details='{other_details}', contact_no='{contact_no}'  WHERE id={id} """
+        # Patient.objects.raw(change_query, Patient.id)
+        
+        
+        # if img=='':
+        #     Patient.objects.filter(id=id).update(name=name,  gender=gender, dob=dob, problem=problem, medical_history=medical_history, operation_history=operation_history, other_details=other_details, contact_no=contact_no)
+        # else:
+        #     Patient.objects.filter(id=id).update(name=name, img=img, gender=gender, dob=dob, problem=problem, medical_history=medical_history, operation_history=operation_history, other_details=other_details, contact_no=contact_no)
+        
+        if is_img_changed:
+            remove_patient_deletion_performer(request, True, False, patient_id)
+        else:
+            remove_patient_deletion_performer(request, False, False, patient_id)
+
+
+        # Adding that same patient in database again
+
+        patient = Patient(patient_id, name, img, gender, dob, problem, medical_history, operation_history, other_details, contact_no)
+
+        patient.save()
+
+    
+        messages.success(request, "Patient details have been changed")
+
+    else:
+        messages.error(request, "Couldn't change the details save")
+
+    try:
+        patient_all_treatment_details = Patient_treatment_details.objects.raw(f"""SELECT * FROM public."Data_manager_patient_treatment_details" WHERE patient_id = '{ patient_id }' ORDER BY id DESC """)
+    except: 
+        print('No table found!')
+        
+    patients = Patient.objects.all()
+    patients = patients.reverse
+    return render(request, 'home.html', { 'patients_list': patients})
+
+    
 def patient_details(request):
     global patient_id
     global treatment_no
@@ -130,6 +226,10 @@ def patient_details(request):
                     treatment_no = treatment_no + 1
 
         dob = str(patient.dob).replace(" ", "")
+
+        #  To return only most recent treatment 
+
+        
     
         
         return render(request, 'patient_details.html', {'patient': patient, 'treatment_no': treatment_no, 'patient_all_treatment_details': patient_all_treatment_details, 'dob': dob})
@@ -175,8 +275,6 @@ def show_searched_patient(request):
 
 
 def show_searched_patient_for_remove_patient(request):
-
-   
 
     if request.method == 'POST':
         patient_name = request.POST['searched_name']
@@ -262,65 +360,45 @@ def remove_patient(request):
 
 
 def remove_patient_from_db(request):
-
- 
-
     if request.method == 'POST':
         patient_id = request.POST['patient_id_in']
 
-  
+        
+    return remove_patient_deletion_performer(request, True, True, patient_id)
+    
+
+
+def remove_patient_deletion_performer(request, delete_img, remove_record, patient_id):
+    # if request.method == 'POST':
+    #     patient_id = request.POST['patient_id_in']
+
+
+    print('deletion is called...')
+
+    pat = Patient.objects.raw(f"""SELECT * FROM public."Data_manager_patient"  WHERE id = '{ patient_id }'  """) 
+    for i in pat:
+        image_name = i.img
+
+
+    if str(image_name) != '' and delete_img:
+
+        image_name = str(image_name)
+        image_name = "media/" + image_name
+        if os.path.exists(image_name):
+            os.remove(image_name)
+
+        
 
         # Patient.objects._raw_delete(f"""DELETE FROM public."Data_manager_patient" WHERE id = { patient_id } """)
         # Patient_treatment_details.objects._raw_delete(f"""DELETE FROM public."Data_manager_patient_treatment_details" WHERE patient_id = { patient_id } """)
 
-        Patient.objects.filter(id=patient_id).delete()
+    Patient.objects.filter(id=patient_id).delete()
+
+    if remove_record:
         Patient_treatment_details.objects.filter(patient_id=patient_id).delete()
-        
+
+        # Taking name of the img from database to delete the photo from the folder
 
     patients = Patient.objects.all()
     return render(request, 'remove_patient.html', {'patients_list': patients})
 
-
-def change_patient_details(request):
-    if request.method == "POST":
-        id = request.POST['patient_id_to_change_data']
-        name = request.POST['name']
-        gender = request.POST['gender']
-        dob = request.POST['dob']
-        problem = request.POST['problem']
-        medical_history = request.POST['medical_history']
-        operation_history = request.POST['operation_history']
-        other_details = request.POST['other_details']
-        contact_no = request.POST['contact_no']
-        
-        try:
-            img = request.FILES['img']
-        except:
-            img = ''
-
-        if img is None:
-            img = ''
-
-        # change_query = f""" UPDATE public."Data_manager_patient" SET name='{name}', img='{img}', gender='{gender}', dob='{dob}', problem='{problem}', medical_history='{medical_history}',
-        #                         operation_history='{operation_history}', other_details='{other_details}', contact_no='{contact_no}'  WHERE id={id} """
-        # Patient.objects.raw(change_query, Patient.id)
-        
-        
-        Patient.objects.filter(id=id).update(name=name, img=img, gender=gender, dob=dob, problem=problem, medical_history=medical_history, operation_history=operation_history, other_details=other_details, contact_no=contact_no)
-        
-    
-        messages.success(request, "Patient details have been changed")
-
-    else:
-        messages.error(request, "Couldn't change the details save")
-
-    try:
-        patient_all_treatment_details = Patient_treatment_details.objects.raw(f"""SELECT * FROM public."Data_manager_patient_treatment_details" WHERE patient_id = '{ patient_id }' ORDER BY id DESC """)
-    except: 
-        print('No table found!')
-        
-    patients = Patient.objects.all()
-    patients = patients.reverse
-    return render(request, 'home.html', { 'patients_list': patients})
-
-     

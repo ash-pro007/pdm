@@ -83,6 +83,7 @@ th, td {
 }
 
 
+
 /* -------------- show treatment details -------------- */
 
 .main-container {
@@ -91,6 +92,7 @@ th, td {
 
 .heading-all-details {
     text-align: center;
+    font-size: 2.5rem;
 }
 
 .upper-conatiner-all-treatment-details {
@@ -188,6 +190,39 @@ th, td {
 
 
 /* ----------- Add Treatment form ends ----------- */
+
+
+
+/* ----------- all treatment details div css ----------- */
+
+.div-all-treatment-details {
+
+    padding-top: 3rem;
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 5rem;
+    width: 100%;
+    background-color: rgba(128, 200, 192, 0.119)
+}
+
+
+.div-conatiner-all-treatment-details {
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+    display:inline-block;
+    border-radius: 10px;
+    height: fit-content;
+    margin: auto auto;
+    padding: 4rem;
+    width: fit-content;
+    margin: 20px;
+   
+}
+
+
+
+/* ----------- all treatment details div css ----------- */
+
 
 
 
