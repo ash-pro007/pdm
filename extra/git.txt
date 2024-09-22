@@ -1,0 +1,5 @@
+1. to compile or add all files to send to git - git add .
+
+2. to commit that files                       - git commit -m "give remarks here"
+
+3. to actually push the code                  - git push -u origin <brach name>
