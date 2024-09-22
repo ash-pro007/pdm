@@ -235,7 +235,6 @@ def patient_details(request):
         return render(request, 'patient_details.html', {'patient': patient, 'treatment_no': treatment_no, 'patient_all_treatment_details': patient_all_treatment_details, 'dob': dob})
     
 
-
 def show_searched_patient(request):
 
     if request.method == 'POST':
@@ -313,7 +312,6 @@ def show_searched_patient_for_remove_patient(request):
     return render(request, 'remove_patient.html', {'patients_list': patients, 'list_of_matched_patient': list_of_matched_patient})
 
 
-
 def save_treatment_details(request):
     global patient_id
     global treatment_no
@@ -347,10 +345,36 @@ def save_treatment_details(request):
 
         treatment_no = 1
 
-    patients = Patient.objects.all()
+    # patients = Patient.objects.all()
  
-    return render(request, 'home.html', {'patients_list': patients})
+    # return render(request, 'patient_details.html', {'patients_list': patients})
 
+    patient = Patient.objects.get(pk=patient_id)
+
+    try:
+        patient_treatment_details = Patient_treatment_details.objects.raw(f"""SELECT * FROM public."Data_manager_patient_treatment_details" WHERE patient_id = '{ patient_id }' """)
+        patient_all_treatment_details = Patient_treatment_details.objects.raw(f"""SELECT * FROM public."Data_manager_patient_treatment_details" WHERE patient_id = '{ patient_id }' ORDER BY id DESC """)
+    except:
+        print('no table present')
+    
+    
+    treatment_no = 1
+
+    
+    if patient_treatment_details is not None:
+        for details in patient_treatment_details:
+                
+            if treatment_no < details.n_th_treatment:
+                treatment_no = details.n_th_treatment
+            elif treatment_no == details.n_th_treatment:
+                treatment_no = treatment_no + 1
+
+    dob = str(patient.dob).replace(" ", "")
+
+    #  To return only most recent treatment 
+
+    return render(request, 'patient_details.html', {'patient': patient, 'treatment_no': treatment_no, 'patient_all_treatment_details': patient_all_treatment_details, 'dob': dob})
+    
 
 def remove_patient(request):
 
@@ -366,7 +390,6 @@ def remove_patient_from_db(request):
         
     return remove_patient_deletion_performer(request, True, True, patient_id)
     
-
 
 def remove_patient_deletion_performer(request, delete_img, remove_record, patient_id):
     # if request.method == 'POST':
@@ -390,7 +413,7 @@ def remove_patient_deletion_performer(request, delete_img, remove_record, patien
         
 
         # Patient.objects._raw_delete(f"""DELETE FROM public."Data_manager_patient" WHERE id = { patient_id } """)
-        # Patient_treatment_details.objects._raw_delete(f"""DELETE FROM public."Data_manager_patient_treatment_details" WHERE patient_id = { patient_id } """)
+         
 
     Patient.objects.filter(id=patient_id).delete()
 
@@ -401,4 +424,162 @@ def remove_patient_deletion_performer(request, delete_img, remove_record, patien
 
     patients = Patient.objects.all()
     return render(request, 'remove_patient.html', {'patients_list': patients})
+
+
+def change_treatment_details(request):
+    if request.method == 'POST':
+        patient_treatement_no = request.POST['treatment_no']
+        patient_id = request.POST['patient_id_change_treatment']
+
+        print('Patient_id --------------------->>>>> ', patient_id)
+
+        patient_that_treatment_detail = Patient_treatment_details.objects.raw(f"""SELECT * FROM public."Data_manager_patient_treatment_details" WHERE patient_id = '{ patient_id }' AND n_th_treatment = '{patient_treatement_no}'; """)
+        
+        pk_for_treatment_detail = None
+        detail = None
+        for pat in patient_that_treatment_detail:
+            detail = pat
+
+        pk_for_treatment_detail = detail.id
+
+        current_checkup_date = str(detail.current_checkup_date).replace(" ", "")
+        next_checkup_date = str(detail.next_checkup_date).replace(" ", "")
+
+
+
+
+
+#    return render(request, 'change_treatment_details.html', {'treatment_details'})
+    return render(request, 'change_treatment_details.html', {'detail': detail, 'patient_id': patient_id, 'pk_for_treatment_detail': pk_for_treatment_detail, 'current_checkup_date': current_checkup_date, 'next_checkup_date': next_checkup_date})
+
+
+
+# def change_treatment_details_in_db(request):
+#     if request.method == "POST":
+#         patientId = request.POST['patientId']
+#         n_th_treatment = request.POST['n_th_treatment']
+#         id = request.POST['pk_for_treatment_detail']
+
+#         problem = request.POST['problem']
+#         treatment_given = request.POST['treatment_given']
+#         medicine_pres = request.POST['medicine_prescribed']
+#         current_checkup_date = request.POST['current_checkup_date']
+#         next_checkup_date = request.POST['next_checkup']
+
+#         patient_that_treatment_detail = Patient_treatment_details.objects.raw(f"""SELECT * FROM public."Data_manager_patient_treatment_details" WHERE patient_id = '{ patientId }' AND n_th_treatment = '{n_th_treatment}'; """)
+                
+#         detail = None
+#         for pat in patient_that_treatment_detail:
+#             detail = pat
+#             break
+
+#         if problem == '' or problem == None:
+#             problem = detail.problem_detail
+
+#         if treatment_given == '' or treatment_given == None:
+#             treatment_given = detail.treatment_given
+
+#         if medicine_pres == '' or medicine_pres == None:
+#             medicine_pres = detail.medicine_prescribed
+
+#         if current_checkup_date == '' or current_checkup_date == None:
+#             current_checkup_date = detail.current_checkup_date
+
+#         if next_checkup_date == '' or next_checkup_date == None:
+#             next_checkup_date = detail.next_checkup_date
+
+#         change_query = f""" UPDATE public."Patient_treatment_details" SET problem_detail='{problem}', treatment_given='{treatment_given}', medicine_prescribed='{medicine_pres}', 
+#                             current_checkup_date='{current_checkup_date}, next_checkup_date='{next_checkup_date}' WHERE patient_id='{patientId}' AND n_th_treatment='{n_th_treatment}'; """
+
+#         Patient_treatment_details.objects.raw(change_query, Patient_treatment_details.id)
+
+
+
+#     patient_id = request.POST['patient_id_in']
+        
+     
+#     patient = Patient.objects.get(pk=patient_id)
+
+#     try:
+#         patient_treatment_details = Patient_treatment_details.objects.raw(f"""SELECT * FROM public."Data_manager_patient_treatment_details" WHERE patient_id = '{ patient_id }' """)
+#         patient_all_treatment_details = Patient_treatment_details.objects.raw(f"""SELECT * FROM public."Data_manager_patient_treatment_details" WHERE patient_id = '{ patient_id }' ORDER BY id DESC """)
+#     except:
+#         print('no table present')
+    
+    
+#     treatment_no = 1
+
+    
+#     if patient_treatment_details is not None:
+#         for details in patient_treatment_details:
+                
+#             if treatment_no < details.n_th_treatment:
+#                 treatment_no = details.n_th_treatment
+#             elif treatment_no == details.n_th_treatment:
+#                 treatment_no = treatment_no + 1
+
+#     dob = str(patient.dob).replace(" ", "")
+
+#     #  To return only most recent treatment 
+
+#     return render(request, 'patient_details.html', {'patient': patient, 'treatment_no': treatment_no, 'patient_all_treatment_details': patient_all_treatment_details, 'dob': dob})
+
+
+def change_treatment_details_in_db(request):
+    if request.method == "POST":
+        pk = request.POST['pk_for_treatment_detail'] 
+        patient_id = str(request.POST['patientId']).replace(" ", '')
+        n_th_treatment = request.POST['n_th_treatment']
+
+        problem = request.POST['problem']
+        treatment_given = request.POST['treatment_given']
+        medicine_prescribed = request.POST['medicine_prescribed']
+
+        current_checkup_date = request.POST['current_checkup_date']
+        next_checkup_date = request.POST['next_checkup_date']
+
+        try:
+            Patient_treatment_details.objects.filter(id=pk).delete()
+
+            treatment = Patient_treatment_details(pk, patient_id, n_th_treatment, problem, treatment_given, medicine_prescribed, current_checkup_date, next_checkup_date)
+
+            treatment.save()
+
+
+            messages.success(request, "Treament details have been changed")
+        except:
+            messages.success(request, "Couldn't change patient details!")
+
+    
+
+        
+    patient = Patient.objects.get(pk=patient_id)
+
+    try:
+        patient_treatment_details = Patient_treatment_details.objects.raw(f"""SELECT * FROM public."Data_manager_patient_treatment_details" WHERE patient_id = '{ patient_id }' """)
+        patient_all_treatment_details = Patient_treatment_details.objects.raw(f"""SELECT * FROM public."Data_manager_patient_treatment_details" WHERE patient_id = '{ patient_id }' ORDER BY id DESC """)
+    except:
+        print('no table present')
+    
+    
+    treatment_no = 1
+
+    
+    if patient_treatment_details is not None:
+        for details in patient_treatment_details:
+                
+            if treatment_no < details.n_th_treatment:
+                treatment_no = details.n_th_treatment
+            elif treatment_no == details.n_th_treatment:
+                treatment_no = treatment_no + 1
+
+    dob = str(patient.dob).replace(" ", "")
+
+    #  To return only most recent treatment 
+
+    return render(request, 'patient_details.html', {'patient': patient, 'treatment_no': treatment_no, 'patient_all_treatment_details': patient_all_treatment_details, 'dob': dob})
+
+
+
+
 

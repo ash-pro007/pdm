@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>{{ patient.name }}'s profile</title>
 
     <link rel="stylesheet" href="{% static 'style_patient_details.css' %}">
     <link rel="stylesheet" href="{% static 'style_base_components.css' %}">
@@ -224,7 +224,11 @@
                 {% csrf_token %}
     
               
-                <a style="color: #47b3a8;" class="shadow-btn-2" onclick="showChangePatientForm()">Click on Profile to edit</a>   
+                <a style="color: #47b3a8;" class="shadow-btn-2" onclick="showChangePatientForm()">Click to edit Profile</a>   
+
+                
+
+                <a href="#" onclick="showForm()" style="margin-top: 20px;" class="shadow-btn-2" >Add treatment for patient</a>
               
             </div>
     
@@ -286,6 +290,7 @@
     <div class="div-all-treatment-details">
 
         <h3 style="font-size: 2.8rem;" class="heading-all-details">All treatemnt details</h3>
+
         {% for detail in patient_all_treatment_details %}
 
             <div class="div-conatiner-all-treatment-details">
@@ -293,10 +298,12 @@
                 
 
                 <table class="table">
-                    <tr>
+                    <tr class="treatment-no-st" >
                         <th>Treatment no.</th>
                         <td>{{ detail.n_th_treatment }}</td>
                     </tr>
+
+                    
 
                     <tr>
                         <th>Problem in detail</th>
@@ -320,10 +327,25 @@
 
                 </table>
 
-            </div>
+                <!-- <button onclick="showHideEditTreatmentDetails()" id="{{ detail.n_th_treatment }}" style="width: fit-content;" class="shadow-btn">Edit</button> -->
 
+                <!--  -->
+
+                <form  action="{% url 'change_treatment_details' %}" method="post" enctype="multipart/form-data" onsubmit="disableButton();" >
+                    {% csrf_token %}
+                    
+                    <input style="display: none;" value="{{ patient.id }}" name="patient_id_change_treatment" id="patient_id_change_treatment">
+                    <input style="display: none;" value="{{ detail.n_th_treatment }}" name="treatment_no" id="treatment_no">
+                    <button id="{{ detail.n_th_treatment }}" type="submit" style="width: fit-content;" class="shadow-btn"> Edit </button>
+                </form>
+
+
+                <!--  -->
+
+            </div>
             
             {% endfor %}
+        
     </div>
    
 
@@ -331,9 +353,39 @@
     <!-- Main container that shows all the treatment of the patients  ends -->
 
 
-     <!-- ------------------------ Form Add treatment details ------------------------ -->
+     <!-- ------------------------ Form Edit treatment details ------------------------ -->
+
+
+
+
+
+     <!-- ---------------------- Form Edit treatment details ends --------------------- -->
+
+
+     <!-- <div id="patient-edit-treatment-detail-form" class="div-form-container" style="display: none;" >
+        <div class="form-heading">Patient Treatment Detaila</div>
+            <form  action="{% url 'save_treatment_details' %}" method="post" enctype="multipart/form-data" onsubmit="disableButton();" class="form-container-formm">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="exampleFormControlInput1" class="form-label">Patient Name: {{ patient.name }} </label>
+                </div>
+        
+                --------------------------------
+
+                <div  class="mb-3">
+                    <label for="startDate">Next check up date</label>
+                    <input id="next_checkup" name="next_checkup" class="form-control" type="date" required />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+        <button type="clear" onclick="showHideEditTreatmentDetails()" class="btn btn-primary mb-4 btn-hide-regis-form">Cancel</button>
+    </div> -->
+
+    <!-- ------------------------ Form Add treatment details ------------------------ -->
     
-     <div id="patient-treatment-detail-form" class="div-form-container" style="display: none;" >
+    <div id="patient-treatment-detail-form" class="div-form-container" style="display: none;" >
         <div class="form-heading">Patient Treatment</div>
             <form  action="{% url 'save_treatment_details' %}" method="post" enctype="multipart/form-data" onsubmit="disableButton();" class="form-container-formm">
                 {% csrf_token %}
@@ -352,17 +404,17 @@
 
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Problem in detail</label>
-                    <input class="form-control" id="problem" name="problem" rows="3"></input>
+                    <input class="form-control" id="problem" name="problem" rows="3"/>
                 </div>
 
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Treatment given</label>
-                    <input class="form-control" id="treatment_given" name="treatment_given" rows="3"></input>
+                    <input class="form-control" id="treatment_given" name="treatment_given" rows="3"/>
                 </div>
 
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Medicine Prescribed</label>
-                    <input class="form-control" id="medicine_prescribed" name="medicine_prescribed" rows="3"></input>
+                    <input class="form-control" id="medicine_prescribed" name="medicine_prescribed" rows="3"/>
                 </div>
 
                 <div  class="mb-3">
@@ -390,11 +442,15 @@
 
         let isPatientTreatmentForm = false
 
+        let isEditTreatmentDetailsVisible = false
+
         document.addEventListener('keydown', function(event) {
             if (event.key === "Escape") { // Or event.keyCode === 27
               // Code to execute when the Escape key is pressed
               document.getElementById('patient-treatment-detail-form').style.display = 'none';
               document.getElementById('change-patient-details-form').style.display = 'none';
+              document.getElementById('patient-edit-treatment-detail-form').style.display = 'none';
+
             }
         });
 
@@ -423,6 +479,17 @@
             }
         }
 
+        function showHideEditTreatmentDetails() {
+            if (isEditTreatmentDetailsVisible) {
+                document.getElementById('patient-edit-treatment-detail-form').style.display = 'none';
+                isPatientTreatmentForm = false
+                
+            }
+            else {
+                document.getElementById('patient-edit-treatment-detail-form').style.display = 'block';
+                isPatientTreatmentForm = true
+            }
+        }
 
     </script>
 

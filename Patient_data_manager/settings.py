@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-%asn@yli%r=6euor^hfmsa#h_6#qw*e8hj9q6cu5%epiu+&h35'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1','213.210.21.232',]
 
@@ -121,13 +121,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
 
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",  # Ensure you have a 'static' directory in your project root
+# ]
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
+
 
 
 # Default primary key field type
@@ -135,5 +140,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_URL = '/media/'
+MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

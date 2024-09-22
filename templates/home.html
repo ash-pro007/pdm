@@ -55,6 +55,7 @@
 
                 <a style="margin-left: 5rem;" href="signout" class="hc-navbar-item">Logout <i class="fa fa-sign-out" style="font-size:15px"></i></a>
 
+                <a href="#" onclick="chnageGridTableView()" class="hc-navbar-item">C V</i> </a>
 
             </div>
         </div>
@@ -142,7 +143,11 @@
 
     <!-- ---------------------- Form ends here ---------------------- -->
 
-    <div class="container-gridView-div" id="grid-view-container" >
+    
+
+    <!-- ---------------------- Grid View to show all the patients ---------------------- -->
+    
+    <div class="container-gridView-div" id="grid-view-container" style="display: block;">
 
         <table class="table">
             <thead class="patient-data-thead"> 
@@ -192,6 +197,7 @@
                                 Other
                             {% endif %}
                         </td>
+                        
                         <td>{{ patient.dob }}</td>
                         <td>{{ patient.problem }}</td>
                 
@@ -268,6 +274,108 @@
 
     </div>
 
+    <!-- ------------------- Grid View to show all the patients ends -------------------- -->
+
+
+    <!-- ---------------------- Div view to all the patients  ------------------------ -->
+
+
+    <div class="container-main-div" id="div-view-box-container" style="display: none;">
+
+            
+        {% for patient in patients_list %}  
+
+        <div class="main-container-grid-view">
+
+            <div  class="main-div-forl column" id="{{ patient.id }}">
+
+                <div class="div-heading">{{ patient.name }}</div>
+                
+                <hr>
+                <!-- this div contains the 2 div in which 1st div contains information and 2nd contains img -->
+                <div class="div-div-img-horizontal"> 
+                    
+                    <div >
+                        <table class="table">
+                            <tr >
+                                <th class="field-headings">Id</th>
+                                <td class="field-values">{{ patient.id }}</td>
+                            </tr>
+                            <tr >
+                                <th class="field-headings">Name</th>
+                                <td class="field-values">{{ patient.name }}</td>
+                            </tr>
+                            <tr >
+                                <th class="field-headings">Contact No. </th>
+                                <td class="field-values">  {{ patient.contact_no }}</td>
+                            </tr>
+                            <tr >
+                                <th class="field-headings">Gender</th>
+                                <td class="field-values">
+                                    {% if patient.gender == 'm'  %}
+                                        Male
+                                    {% elif patient.gender == 'f'  %}
+                                        Female
+                                    {% else %} 
+                                        Other
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr >
+                                <th class="field-headings">Dob</th>
+                                <td class="field-values">{{ patient.dob }}</td>
+                            </tr>
+
+                            <tr >
+                                <th class="field-headings">Problem</th>
+                                <td class="field-values">{{ patient.problem }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="div-click-to-go">
+                                        {% csrf_token %}
+                        
+                                        <form action="patient_details" method="post">
+                                            {% csrf_token %}
+                                            <input style="display:none" type="text" id="patient_id_in" name="patient_id_in" value="{{ patient.id }}">
+                                            <button style="width:200%; margin-top:20px" class="shadow-btn-2" type="submit">Add treatment deatils</button>   
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        <!-- <div>contact no: 018318230</div>
+                        <div>gender: male</div>
+                        <div>age: 20 years </div> -->
+                        
+                    </div>
+                        <div >
+                            
+                                {% if patient.img.url != ''  %}
+                                    <img class="patient-pi" src="{{ patient.img.url }}" >
+        
+                                {% else  %}
+                                    <img class="patient-pi" src="../static/imgs/default_patient_img.jpg" alt="">
+                                {% endif %}
+        
+                            
+                        </div>
+                    </div>
+
+
+        
+            
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- ---------------------- Div view to all the patients ends ---------------------- -->
 
      
 
@@ -304,7 +412,29 @@
             document.getElementById('btn-search-patient').style.display = 'none';
             document.getElementById('inpt-search-patient').style.display = 'block';
 
-            console.log('search button is working..............')
+            document.getElementById('div-view-box-container').style.display = 'none';
+            document.getElementById('grid-view-container').style.display = 'block';
+
+      
+        }
+
+
+        let display = 'grid'
+
+        function chnageGridTableView() {
+            if(display == 'grid')
+            {
+                document.getElementById('div-view-box-container').style.display = 'block';
+                document.getElementById('grid-view-container').style.display = 'none';
+                display = 'box';   
+            }
+            else
+            {
+                document.getElementById('div-view-box-container').style.display = 'none';
+                document.getElementById('grid-view-container').style.display = 'block';
+                display = 'grid';
+            }
+            
         }
 
     </script>

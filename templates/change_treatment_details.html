@@ -1,0 +1,136 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'style_base_components.css' %}">
+  
+    <link rel="stylesheet" href="{% static 'style_change_treatment_details.css' %}">
+    
+    <title>Change treatment of {{ patient.name }}</title>
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" 
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" 
+          crossorigin="anonymous">
+
+
+    <!-- ---------------- from w3 school for icons ---------------- -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+       
+    </style>
+</head>
+<body>
+
+    <!-- ------------------------- Nav bar -------------------------  -->
+    <nav class="hc-navbar">
+        <div class="hc-navbar-container">
+            <a href="home" class="hc-navbar-brand">PDM</a>
+            <button class="hc-navbar-toggler" onclick="toggleMenu()">&#9776;</button>
+            <div class="hc-navbar-menu" id="navbarMenu">
+
+                
+                <a herf="home" style="color: #f44336; font-weight: 500;"  class="hc-navbar-item">Home <i class="fa fa-home" style="font-size:15px"></i></a>
+                <a href="#" onclick="showForm()" class="hc-navbar-item">Add New Patient  +</i> </a>
+                <a href=" {% url 'remove_patient' %}" class="hc-navbar-item">Remove patient  <i class="material-icons" style="font-size:14px">remove_circle_outline</i>  </a>
+
+    
+                <form class="form-search-patient" id="inpt-search-patient" action="{% url 'show_searched_patient' %}" method="post">
+                    {% csrf_token %}
+                    
+                    <input class="input-form-search" type="text" id="searched_name" name="searched_name" placeholder="Search Patient">
+                    <button class="navg-buttons btn-form-search-patient" type="submit">Search</button>   
+                </form>
+
+                <a href="#" class="hc-navbar-item">About</a>
+
+                <a style="margin-left: 5rem;" href="signout" class="hc-navbar-item">Logout <i class="fa fa-sign-out" style="font-size:15px"></i></a>
+
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- ---------------------- Nav bar ends ------------------------ -->
+
+    <div id="patient-treatment-detail-form" class="div-form-container" style="display: block;"  >
+
+        <div class="form-heading">Change Patient Treatment</div>
+            <form  action="{% url 'change_treatment_details_in_db' %}" method="post" enctype="multipart/form-data" onsubmit="disableButton();" class="form-container-formm">
+                {% csrf_token %}
+        
+        
+                <div >
+                    <label  class="form-label" >Id: {{ patient_id }} </label>
+                    <input type="text" id="patientId" name="patientId" style="display: none;" value="{{ patient_id}} "/>
+                    <input type="text" id="pk_for_treatment_detail" name="pk_for_treatment_detail" style="display: block;" value="{{ pk_for_treatment_detail }} "/>
+
+                </div>
+
+                <div >
+                    <label  class="form-label" >Treatment no. : {{ detail.n_th_treatment }}</label>
+                    <input type="text" id="n_th_treatment" name="n_th_treatment" style="display: none;" value="{{ detail.n_th_treatment }}"/>
+                </div>
+                
+
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Problem in detail</label>
+                    <input class="form-control" id="problem" name="problem" rows="3"  value=" {{ detail.problem_detail }}"/>
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Treatment given</label>
+                    <input class="form-control" id="treatment_given" name="treatment_given" rows="3" value="{{ detail.treatment_given }}"/>
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Medicine Prescribed</label>
+                    <input class="form-control" id="medicine_prescribed" name="medicine_prescribed" rows="3" value="{{ detail.medicine_prescribed }}"/>
+                </div>
+
+                <div  class="mb-3">
+                    <label for="startDate">Current check date: {{ detail.current_checkup_date }}</label>
+                    <input id="current_checkup_date" name="current_checkup_date" class="form-control" value="{{ current_checkup_date }}"  type="date"  />
+                </div>
+
+                <div  class="mb-3">
+                    <label for="startDate">Next check up date: {{ detail.next_checkup_date }}</label>
+                    <input id="next_checkup_date" name="next_checkup_date" class="form-control" type="date"  value="{{ next_checkup_date }}" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+
+        <button type="clear" onclick="showForm()" class="btn btn-primary mb-4 btn-hide-regis-form">Cancel</button>
+    </div>
+
+    <!-- Bootstrap boiler plate -->
+
+    <script 
+        src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous">
+    </script>
+    <script 
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" 
+        crossorigin="anonymous">
+    </script>
+    <script 
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" 
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous">
+    </script>
+
+    <!-- Bootstrap ends here -->
+
+    
+</body>
+</html>

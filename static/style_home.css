@@ -75,3 +75,55 @@ body {
 /* -------------- nav bar -> search patient ends ------------ */
 
 
+.container-main-div {
+    display: flex;
+}
+
+
+.container-main-div {
+    padding-top: 3rem;
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 5rem;
+    width: 100%;
+    background-color: rgba(128, 200, 192, 0.119)
+ }
+
+ .main-container-grid-view {
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+    display: inline-block;
+    border-radius: 10px;
+    height: fit-content;
+    margin: auto auto;
+    padding: 4rem;
+    width: 25rem;
+    margin: 20px;
+ }
+
+ .patient-pi {
+    margin-left: 45%;
+    margin-top: 5%;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.div-div-img-horizontal {
+    content: inherit;
+    margin: auto;
+    display: flex;
+}
+
+.field-headings {
+    text-align: left;
+    font-size: 0.9rem;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.field-values {
+    font-size: 0.8rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+

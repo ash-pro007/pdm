@@ -96,6 +96,7 @@ th, td {
 }
 
 .upper-conatiner-all-treatment-details {
+    max-width: 40rem;
     margin-right: 10rem;
     margin-top: 5rem;
 }
@@ -196,7 +197,7 @@ th, td {
 /* ----------- all treatment details div css ----------- */
 
 .div-all-treatment-details {
-
+    
     padding-top: 3rem;
     margin-top: 100px;
     margin-left: auto;
@@ -213,13 +214,19 @@ th, td {
     border-radius: 10px;
     height: fit-content;
     margin: auto auto;
-    padding: 4rem;
+    padding: 2.8rem;
     width: fit-content;
+    max-width: 40rem;
     margin: 20px;
    
 }
 
-
+.treatment-no-st {
+    background-color: #4bc5b9;
+    color: white;
+    border-radius: 60px;
+    
+}
 
 /* ----------- all treatment details div css ----------- */
 
