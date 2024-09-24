@@ -344,3 +344,30 @@
 
 /* ------------- Form ends -------------  */
 
+
+/* --------------- shape trasformation  style --------------- */
+
+.shape {
+
+    width: 150px;
+    height: 150px;
+    background: #4285F4;
+    margin: 0 auto;
+    -webkit-transition: all .5s ease-out;
+    -moz-transition: all .5s ease-out;
+    transition: all .5s ease-out;
+}
+
+.shape.circle {
+    -webkit-clip-path: circle(50% at 50% 50%);
+    clip-path: circle(50% at 50% 50%);
+}
+
+/* Circle to square */
+.shape.circle.to-square:hover {
+    -webkit-clip-path: circle(70% at 50% 50%);
+    clip-path: circle(70% at 50% 50%);
+}
+/* --------------- shape trasformation  ends  --------------- */
+
+

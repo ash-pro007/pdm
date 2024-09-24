@@ -89,22 +89,22 @@
 
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Seeing Doctor for</label>
-                <input class="form-control" id="problem" name="problem" rows="3" value="{{ patient.problem }}"></input>
+                <textarea class="form-control" id="problem" name="problem" rows="3" >{{ patient.problem }}</textarea>
             </div>
 
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Medical History</label>
-                <input class="form-control" id="medical_history" name="medical_history" rows="3" value="{{ patient.medical_history }}"></input>
+                <textarea class="form-control" id="medical_history" name="medical_history" rows="3" >{{ patient.medical_history }}</textarea>
             </div>
 
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Operation History</label>
-                <input class="form-control" id="operation_history" name="operation_history" rows="3" value="{{ patient.operation_history }}"></input>
+                <textarea class="form-control" id="operation_history" name="operation_history" rows="3" >{{ patient.operation_history }}</textarea>
             </div>
 
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Other detials</label>
-                <input class="form-control" id="other_details" name="other_details" rows="3" value="{{ patient.other_details }}"></input>
+                <textarea class="form-control" id="other_details" name="other_details" rows="3">{{ patient.other_details }}</textarea>
             </div>
 
             <div class="mb-3">
@@ -121,7 +121,7 @@
         </form>
 
         <div class="btn-hide-regis-form">
-            <button type="clear" onclick="showChangePatientForm()" class="btn btn-primary mb-4 btn-hide-regis-form">Cancel</button>
+            <button type="reset" onclick="showChangePatientForm()" class="btn btn-primary mb-4 btn-hide-regis-form">Cancel</button>
         </div>
     </div>
 
@@ -144,11 +144,14 @@
     <!-- ---------------------- Message ends here ---------------------- -->
 
 
+    <!-- ---------------------- Patient Details div ---------------------- -->
+
     <div class="main-container">
 
         <div  class="main-div-forl column" id="{{ patient.id }}">
             <div class="div-heading">{{ patient.name }}</div>
             <hr>
+
             <!-- this div contains the 2 div in which 1st div contains information and 2nd contains img -->
             <div class="div-div-img-horizontal"> 
                 
@@ -191,10 +194,10 @@
                 <div >
                     
                         {% if patient.img.url != ''  %}
-                            <img class="patient-pi" src="{{ patient.img.url }}" >
+                            <img id="patient-img-cont" class="patient-pi" src="{{ patient.img.url }}" alt="" onclick="showImgInBigSize()" >
 
                         {% else  %}
-                            <img class="patient-pi" src="../static/imgs/default_patient_img.jpg" alt="">
+                            <img id="patient-img-cont"  class="patient-pi" src="../static/imgs/default_patient_img.jpg" alt="" onclick="showImgInBigSize()"> 
                         {% endif %}
 
                     
@@ -227,11 +230,17 @@
                 <a style="color: #47b3a8;" class="shadow-btn-2" onclick="showChangePatientForm()">Click to edit Profile</a>   
 
                 
-
                 <a href="#" onclick="showForm()" style="margin-top: 20px;" class="shadow-btn-2" >Add treatment for patient</a>
               
             </div>
     
+            
+            {% if total_remaining_amt > 0 %}
+
+            <div style="color: rgb(255, 57, 57); margin-top:40px" class="div-heading">Total Fees due: {{ total_remaining_amt }}</div>
+
+            {% endif %}
+
         </div>
 
 
@@ -247,31 +256,89 @@
                     
 
                     <table class="table">
-                        <tr>
+                        <tr class="treatment-no-st" >
                             <th>Treatment no.</th>
-                            <td>{{ detail.n_th_treatment }}</td>
+                            <td class="text-wrap-for-th">{{ detail.n_th_treatment }}</td>
                         </tr>
-
+    
+                        <tr >
+                            <td><br></td>
+                        </tr>
+    
                         <tr>
                             <th>Problem in detail</th>
-                            <td>{{ detail.problem_detail }}</td>
+                            <td class="text-wrap-for-th">{{ detail.problem_detail }}</td>
                         </tr>
-
+    
+                        <tr >
+                            <th>Treatment given</th>
+                            <td class="text-wrap-for-th">{{ detail.treatment_given }}</td>
+                        </tr>
+    
+    
                         <tr>
                             <th>Medicine prescribed</th>
-                            <td>{{ detail.medicine_prescribed }}</td>
+                            <td class="text-wrap-for-th">{{ detail.medicine_prescribed }}</td>
                         </tr>
-
+    
+                        
+                        <tr >
+                            <td><br></td>
+                        </tr>
+    
+    
                         <tr>
                             <th>Date on treatemnt given</th>
-                            <td>{{ detail.current_checkup_date }}</td>
+                            <td class="text-wrap-for-th">{{ detail.current_checkup_date }}</td>
                         </tr>
-
+    
                         <tr>
                             <th>Next checkup date give</th>
-                            <td>{{ detail.next_checkup_date }}</td>
+                            <td class="text-wrap-for-th">{{ detail.next_checkup_date }}</td>
+                        </tr>
+    
+    
+                        <tr>
+                            <th>Remarks (Extra)</th>
+                            <td class="text-wrap-for-th">{{ detail.remarks }}</td>
+                        </tr>
+    
+                        <tr >
+                            <td><br></td>
+                        </tr>
+    
+                        <tr>
+                            <th>Fees charged</th>
+                            <td class="text-wrap-for-th">{{ detail.fees_charged }}</td>
+                        </tr>
+    
+    
+                        <tr>
+                            <th>Fees paid</th>
+                            <td class="text-wrap-for-th">{{ detail.fees_paid }}</td>
+                        </tr>
+    
+                        {% if detail.fees_remaining > 0 %}
+                        <tr class="fees-remaining-red-background">
+                            <th>Fees remaining</th>
+                            <td class="text-wrap-for-th">{{ detail.fees_remaining }}</td>
                         </tr>
 
+                        {% else %}
+
+                        <tr>
+                            <th>Fees remaining</th>
+                            <td class="text-wrap-for-th">{{ detail.fees_remaining }}</td>
+                        </tr>
+
+                        {% endif %}
+    
+                        <tr >
+                            <td><br></td>
+                        </tr>
+    
+    
+    
                     </table>
 
                 </div>
@@ -283,6 +350,9 @@
 
        
     </div>
+
+    <!-- -------------------- Patient Details div ends -------------------- -->
+
 
 
     <!-- Main container that shows all the treatment of the patients  -->
@@ -300,32 +370,95 @@
                 <table class="table">
                     <tr class="treatment-no-st" >
                         <th>Treatment no.</th>
-                        <td>{{ detail.n_th_treatment }}</td>
+                        <td class="text-wrap-for-th">{{ detail.n_th_treatment }}</td>
                     </tr>
 
-                    
+                    <tr >
+                        <td><br></td>
+                    </tr>
 
                     <tr>
-                        <th>Problem in detail</th>
-                        <td>{{ detail.problem_detail }}</td>
+                        <th>Diagnos</th>
+                        <td class="text-wrap-for-th">{{ detail.problem_detail }}</td>
                     </tr>
+
+                    <tr>
+                        <th>Symptoms</th>
+                        <td class="text-wrap-for-th">{{ detail.symptoms }}</td>
+                    </tr>
+
+
+                    <tr >
+                        <th>Treatment given</th>
+                        <td class="text-wrap-for-th">{{ detail.treatment_given }}</td>
+                    </tr>
+
 
                     <tr>
                         <th>Medicine prescribed</th>
-                        <td>{{ detail.medicine_prescribed }}</td>
+                        <td class="text-wrap-for-th">{{ detail.medicine_prescribed }}</td>
                     </tr>
+
+                    
+                    <tr >
+                        <td><br></td>
+                    </tr>
+
 
                     <tr>
                         <th>Date on treatemnt given</th>
-                        <td>{{ detail.current_checkup_date }}</td>
+                        <td class="text-wrap-for-th">{{ detail.current_checkup_date }}</td>
                     </tr>
 
                     <tr>
                         <th>Next checkup date give</th>
-                        <td>{{ detail.next_checkup_date }}</td>
+                        <td class="text-wrap-for-th">{{ detail.next_checkup_date }}</td>
                     </tr>
 
+
+                    <tr>
+                        <th>Remarks (Extra)</th>
+                        <td class="text-wrap-for-th">{{ detail.remarks }}</td>
+                    </tr>
+
+                    <tr >
+                        <td><br></td>
+                    </tr>
+
+                    <tr>
+                        <th>Fees charged</th>
+                        <td class="text-wrap-for-th">{{ detail.fees_charged }}</td>
+                    </tr>
+
+
+                    <tr>
+                        <th>Fees paid</th>
+                        <td class="text-wrap-for-th">{{ detail.fees_paid }}</td>
+                    </tr>
+
+                    {% if detail.fees_remaining > 0 %}
+                    <tr class="fees-remaining-red-background">
+                        <th>Fees remaining</th>
+                        <td class="text-wrap-for-th">{{ detail.fees_remaining }}</td>
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <th>Fees remaining</th>
+                        <td class="text-wrap-for-th">{{ detail.fees_remaining }}</td>
+                    </tr>
+
+                    {% endif %}
+
+                    <tr >
+                        <td><br></td>
+                    </tr>
+
+
+
                 </table>
+
 
                 <!-- <button onclick="showHideEditTreatmentDetails()" id="{{ detail.n_th_treatment }}" style="width: fit-content;" class="shadow-btn">Edit</button> -->
 
@@ -403,18 +536,23 @@
                 
 
                 <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Problem in detail</label>
-                    <input class="form-control" id="problem" name="problem" rows="3"/>
+                    <label for="exampleFormControlTextarea1" class="form-label">Dignosis</label>  <!-- Problem in detail -->
+                    <textarea class="form-control" id="problem" name="problem" rows="3"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Symptoms</label>  <!-- Problem in detail -->
+                    <textarea class="form-control" id="symptoms" name="symptoms" rows="3"></textarea>
                 </div>
 
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Treatment given</label>
-                    <input class="form-control" id="treatment_given" name="treatment_given" rows="3"/>
+                    <textarea class="form-control" id="treatment_given" name="treatment_given" rows="3"></textarea>
                 </div>
 
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Medicine Prescribed</label>
-                    <input class="form-control" id="medicine_prescribed" name="medicine_prescribed" rows="3"/>
+                    <textarea class="form-control" id="medicine_prescribed" name="medicine_prescribed" rows="3"></textarea>
                 </div>
 
                 <div  class="mb-3">
@@ -424,13 +562,42 @@
 
                 <div  class="mb-3">
                     <label for="startDate">Next check up date</label>
-                    <input id="next_checkup" name="next_checkup" class="form-control" type="date" required />
+                    <input id="next_checkup" name="next_checkup" class="form-control" type="date"  />
                 </div>
+                
+
+                <div  class="mb-3">
+                    <label>Fees charged</label>
+                    <input id="fees_charged" name="fees_charged" class="form-control" type="number" required />
+                </div>
+
+                <div  class="mb-3">
+                    <label>Fees paid</label>
+                    <input id="fees_paid" name="fees_paid" class="form-control" type="number" required onfocusout="show_remaining_fees()" />
+                </div>
+
+
+                <div  class="mb-3">
+                    <label>Remaining fees</label>
+                    <input  id="fees_remaining" name="fees_remaining" class="form-control" type="number" value="" disabled onclick="show_remaining_fees()" />
+                </div>
+
+
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Remarks (extra)</label>
+                    <input class="form-control" id="remarks" name="remarks" rows="3" />
+                </div>
+
+
+                
 
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
 
-        <button type="clear" onclick="showForm()" class="btn btn-primary mb-4 btn-hide-regis-form">Cancel</button>
+        <button type="reset" onclick="showForm()" class="btn btn-primary mb-4 btn-hide-regis-form">Cancel</button>
+
+        <button type="reset" onclick="show_remaining_fees()" class="btn btn-primary mb-4 btn-hide-regis-form">show</button>
+
     </div>
 
 
@@ -488,6 +655,51 @@
             else {
                 document.getElementById('patient-edit-treatment-detail-form').style.display = 'block';
                 isPatientTreatmentForm = true
+            }
+        }
+
+
+        function show_remaining_fees() {
+            let charged_fees = document.getElementById('fees_charged').value;
+            let fee_paid = document.getElementById('fees_paid').value;
+
+
+            charged_fees = parseFloat(charged_fees)
+
+            console.log("parsed float = " + parseFloat(charged_fees))
+            fee_paid = parseFloat(fee_paid);
+            let remaining_fees = charged_fees - fee_paid;
+
+            if(charged_fees < 0) {
+                alert('Charged fees cannot be less than 0 !')
+            }
+
+
+            if(fee_paid < 0) {
+                alert('Paid fees cannot be less than 0 !')
+            }
+
+            if(remaining_fees < 0) {
+                alert('Fee remaining is less than 0 ! You might have entered wrong values for the fees paid or fees charged')
+            }
+
+
+            document.getElementById('fees_remaining').value = remaining_fees + "";
+
+        
+        }
+
+        isBig = false
+        function showImgInBigSize() {
+            if(!isBig)
+            {
+                document.getElementById('patient-img-cont').className = 'patient-pi2';
+                isBig = true;
+            }
+            else 
+            {
+                document.getElementById('patient-img-cont').className = 'patient-pi';
+                isBig = false;
             }
         }
 

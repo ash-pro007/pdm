@@ -67,6 +67,8 @@ def register_patient(request):
         other_details = request.POST['other_details']
         contact_no = request.POST['contact_no']
         
+        contact_no = contact_no.replace(' ', '')
+        
         try:
             img = request.FILES['img']
         except:
@@ -229,10 +231,24 @@ def patient_details(request):
 
         #  To return only most recent treatment 
 
+
+        # part to return the total remaining amount of patient to be paid (in total)
+
+        total_remaining_amt = 0
+
+        for det in patient_all_treatment_details:
+            total_remaining_amt += float(det.fees_remaining)
+
+        
+        print('total_remaining_amt  ================>>>> ', total_remaining_amt)
+        
+
+
+        ## --------------------------------------------------------------------------
         
     
         
-        return render(request, 'patient_details.html', {'patient': patient, 'treatment_no': treatment_no, 'patient_all_treatment_details': patient_all_treatment_details, 'dob': dob})
+        return render(request, 'patient_details.html', {'patient': patient, 'treatment_no': treatment_no, 'patient_all_treatment_details': patient_all_treatment_details, 'dob': dob, 'total_remaining_amt':total_remaining_amt} )
     
 
 def show_searched_patient(request):
@@ -319,23 +335,39 @@ def save_treatment_details(request):
 
     if request.method == 'POST':
         problem = request.POST['problem']
+        symptoms = request.POST['symptoms']
+
         treatment_given = request.POST['treatment_given']
         medicine_prescribed = request.POST['medicine_prescribed']
+
+        fees_charged = request.POST['fees_charged']
+        fees_paid = request.POST['fees_paid']
+        
+        fees_charged = float(fees_charged)
+        fees_paid = float(fees_paid)
+
+        fees_remaining = fees_charged - fees_paid
+
+
         next_checkup = request.POST['next_checkup']
         current_checkup_date = request.POST['current_checkup_date']
+
+        remarks = request.POST['remarks']    
+    
         # next_checkup = '2002-12-12'
+
 
       
         
         last_entry = Patient_treatment_details.objects.last()
 
         if last_entry is None:
-            patient_treatment_details = Patient_treatment_details(1, patient_id, treatment_no, problem, treatment_given, 
-                                                                medicine_prescribed, current_checkup_date, next_checkup)
+            patient_treatment_details = Patient_treatment_details(1, patient_id, treatment_no, problem, symptoms, treatment_given, 
+                                                                medicine_prescribed, fees_charged, fees_paid, fees_remaining, current_checkup_date, next_checkup, remarks)
 
         else:
-            patient_treatment_details = Patient_treatment_details((last_entry.id + 1), patient_id, treatment_no , problem, treatment_given, 
-                                                                  medicine_prescribed, current_checkup_date, next_checkup)
+            patient_treatment_details = Patient_treatment_details((last_entry.id + 1), patient_id, treatment_no , problem, symptoms, treatment_given, 
+                                                                  medicine_prescribed, fees_charged, fees_paid, fees_remaining, current_checkup_date, next_checkup, remarks)
         
 
         try:
@@ -526,22 +558,36 @@ def change_treatment_details(request):
 
 
 def change_treatment_details_in_db(request):
+    global patient_id
+
     if request.method == "POST":
         pk = request.POST['pk_for_treatment_detail'] 
-        patient_id = str(request.POST['patientId']).replace(" ", '')
+        # patient_id = str(request.POST.get('patientId', False)).replace(" ", '')
         n_th_treatment = request.POST['n_th_treatment']
 
         problem = request.POST['problem']
+        symptoms = request.POST['symptoms']
+
         treatment_given = request.POST['treatment_given']
         medicine_prescribed = request.POST['medicine_prescribed']
+
+        fees_charged = request.POST['fees_charged']
+        fees_paid = request.POST['fees_paid']
+
+        fees_charged = float(fees_charged)
+        fees_paid = float(fees_paid)
+
+        fees_remaining = fees_charged - fees_paid
 
         current_checkup_date = request.POST['current_checkup_date']
         next_checkup_date = request.POST['next_checkup_date']
 
+        remarks = request.POST['remarks']
+
         try:
             Patient_treatment_details.objects.filter(id=pk).delete()
 
-            treatment = Patient_treatment_details(pk, patient_id, n_th_treatment, problem, treatment_given, medicine_prescribed, current_checkup_date, next_checkup_date)
+            treatment = Patient_treatment_details(pk, patient_id, n_th_treatment, problem, symptoms, treatment_given, medicine_prescribed, fees_charged, fees_paid, fees_remaining, current_checkup_date, next_checkup_date, remarks)
 
             treatment.save()
 
@@ -578,8 +624,3 @@ def change_treatment_details_in_db(request):
     #  To return only most recent treatment 
 
     return render(request, 'patient_details.html', {'patient': patient, 'treatment_no': treatment_no, 'patient_all_treatment_details': patient_all_treatment_details, 'dob': dob})
-
-
-
-
-

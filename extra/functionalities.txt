@@ -1,0 +1,10 @@
+1. add fees 
+
+    1.1 total charged fee for the treatment
+    1.2 totaly amount paid by the patient
+    1.3 remining amount by patient (automatic)
+    1.4 adding remarks for treament 
+    
+2. add symptoms column in db
+
+

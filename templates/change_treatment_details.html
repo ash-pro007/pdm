@@ -32,28 +32,14 @@
     <!-- ------------------------- Nav bar -------------------------  -->
     <nav class="hc-navbar">
         <div class="hc-navbar-container">
-            <a href="home" class="hc-navbar-brand">PDM</a>
+            <a href="#" class="hc-navbar-brand">Patient Data Manager PDM</a>
             <button class="hc-navbar-toggler" onclick="toggleMenu()">&#9776;</button>
             <div class="hc-navbar-menu" id="navbarMenu">
-
-                
-                <a herf="home" style="color: #f44336; font-weight: 500;"  class="hc-navbar-item">Home <i class="fa fa-home" style="font-size:15px"></i></a>
-                <a href="#" onclick="showForm()" class="hc-navbar-item">Add New Patient  +</i> </a>
-                <a href=" {% url 'remove_patient' %}" class="hc-navbar-item">Remove patient  <i class="material-icons" style="font-size:14px">remove_circle_outline</i>  </a>
-
-    
-                <form class="form-search-patient" id="inpt-search-patient" action="{% url 'show_searched_patient' %}" method="post">
-                    {% csrf_token %}
-                    
-                    <input class="input-form-search" type="text" id="searched_name" name="searched_name" placeholder="Search Patient">
-                    <button class="navg-buttons btn-form-search-patient" type="submit">Search</button>   
-                </form>
-
+                <a href="home" class="hc-navbar-item">Home <i class="fa fa-home" style="font-size:15px"></i></a>
+                <!-- <a href="patient_details" class="hc-navbar-item">Go back</a> -->
                 <a href="#" class="hc-navbar-item">About</a>
-
+            
                 <a style="margin-left: 5rem;" href="signout" class="hc-navbar-item">Logout <i class="fa fa-sign-out" style="font-size:15px"></i></a>
-
-
             </div>
         </div>
     </nav>
@@ -69,7 +55,8 @@
         
                 <div >
                     <label  class="form-label" >Id: {{ patient_id }} </label>
-                    <input type="text" id="patientId" name="patientId" style="display: none;" value="{{ patient_id}} "/>
+                    <input type="text" id="patientId" name="patientId" style="display: none;" value="{{ patient_id}} " disabled/>
+                    
                     <input type="text" id="pk_for_treatment_detail" name="pk_for_treatment_detail" style="display: block;" value="{{ pk_for_treatment_detail }} "/>
 
                 </div>
@@ -81,18 +68,25 @@
                 
 
                 <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Problem in detail</label>
-                    <input class="form-control" id="problem" name="problem" rows="3"  value=" {{ detail.problem_detail }}"/>
+                    <label for="exampleFormControlTextarea1" class="form-label">Diagnos</label>
+                    <textarea class="form-control" id="problem" name="problem" rows="3" >{{ detail.problem_detail }}</textarea> 
                 </div>
+
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Symptoms</label>  <!-- Problem in detail -->
+                    <textarea class="form-control" id="symptoms" name="symptoms" rows="3">{{ detail.symptoms }}</textarea>
+                </div>
+
 
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Treatment given</label>
-                    <input class="form-control" id="treatment_given" name="treatment_given" rows="3" value="{{ detail.treatment_given }}"/>
+                    <textarea class="form-control" id="treatment_given" name="treatment_given" rows="3">{{ detail.treatment_given }}</textarea> 
                 </div>
 
+     
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Medicine Prescribed</label>
-                    <input class="form-control" id="medicine_prescribed" name="medicine_prescribed" rows="3" value="{{ detail.medicine_prescribed }}"/>
+                    <textarea class="form-control" id="medicine_prescribed" name="medicine_prescribed" rows="3" >{{ detail.medicine_prescribed }}</textarea> 
                 </div>
 
                 <div  class="mb-3">
@@ -105,13 +99,71 @@
                     <input id="next_checkup_date" name="next_checkup_date" class="form-control" type="date"  value="{{ next_checkup_date }}" />
                 </div>
 
+                <div  class="mb-3">
+                    <label>Fees charged</label>
+                    <input id="fees_charged" name="fees_charged" class="form-control" type="number" value="{{ detail.fees_charged }}" required />
+                </div>
+
+                <div  class="mb-3">
+                    <label>Fees paid</label>
+                    <input id="fees_paid" name="fees_paid" class="form-control" type="number" required onfocusout="show_remaining_fees()" value="{{ detail.fees_paid }}" requried/>
+                </div>
+
+
+                <div  class="mb-3">
+                    <label>Remaining fees</label>
+                    <input  id="fees_remaining" name="fees_remaining" class="form-control" type="number" value="" disabled onclick="show_remaining_fees()" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="exampleFormControlTextarea1" class="form-label">Remarks (extra)</label>
+                    <textarea onclick="show_remaining_fees()" class="form-control" id="remarks" name="remarks" rows="3" >{{ detail.remarks }}</textarea>
+                </div>
+
+
+
+
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
 
-        <button type="clear" onclick="showForm()" class="btn btn-primary mb-4 btn-hide-regis-form">Cancel</button>
+        <button type="reset" onclick="history.back()" class="btn btn-primary mb-4 btn-hide-regis-form">Cancel</button>
     </div>
 
     <!-- Bootstrap boiler plate -->
+
+    <script>
+
+        function show_remaining_fees() {
+            let charged_fees = document.getElementById('fees_charged').value;
+            let fee_paid = document.getElementById('fees_paid').value;
+
+
+            charged_fees = parseFloat(charged_fees)
+
+            console.log("parsed float = " + parseFloat(charged_fees))
+            fee_paid = parseFloat(fee_paid);
+            let remaining_fees = charged_fees - fee_paid;
+
+            if(charged_fees < 0) {
+                alert('Charged fees cannot be less than 0 !')
+            }
+
+
+            if(fee_paid < 0) {
+                alert('Paid fees cannot be less than 0 !')
+            }
+
+            if(remaining_fees < 0) {
+                alert('Fee remaining is less than 0 ! You might have entered wrong values for the fees paid or fees charged')
+            }
+
+
+            document.getElementById('fees_remaining').value = remaining_fees + "";
+
+        
+        }
+
+    </script>
 
     <script 
         src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

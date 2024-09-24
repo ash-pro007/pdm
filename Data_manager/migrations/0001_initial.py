@@ -33,10 +33,15 @@ class Migration(migrations.Migration):
                 ('patient_id', models.CharField(max_length=11)),
                 ('n_th_treatment', models.IntegerField()),
                 ('problem_detial', models.TextField()),
+                ('symptoms', models.TextField()),
                 ('treatment_given', models.TextField()),
                 ('medicine_prescribed', models.TextField()),
+                ('fees_charged' , models.DecimalField(decimal_places=2, max_digits=10)),
+                ('fees_paid' , models.DecimalField(decimal_places=2, max_digits=10)),
+                ('fees_remaining' , models.DecimalField(decimal_places=2, max_digits=10)), 
                 ('current_checkup_date', models.DateField()),
                 ('next_checkup_date', models.DateField()),
+                ('remarks', models.TextField())  
             ],
         ),
     ]

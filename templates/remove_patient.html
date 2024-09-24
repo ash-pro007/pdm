@@ -100,10 +100,10 @@
                     <th>Contact N0.</th>
                     <th>Gender</th>
                     <th>Dob</th>
-                    <th>Problem</th>
+                    <!-- <th>Problem</th> -->
                
-                    <th>Other Detail</th>
-                    <th>Add treatment details</th>
+                    <!-- <th>Other Detail</th> -->
+                    <th>Click to remove</th>
                 </tr>
             </thead>
 
@@ -116,7 +116,7 @@
                 <th scope="row">0</th>
                 <td> 
                     {% if patient.img.url != ''  %}
-                        <img class="patient-pi-grid" src="{{ patient.img.url }}" >
+                        <img class="patient-pi-grid" src="{{ patient.img.url }}" alt="">
 
                     {% else  %}
                         <img class="patient-pi-grid" src="../static/imgs/default_patient_img.jpg" alt="">
@@ -136,9 +136,9 @@
                     {% endif %}
                 </td>
                 <td>{{ patient.dob }}</td>
-                <td>{{ patient.problem }}</td>
+                <!-- <td>{{ patient.problem }}</td> -->
         
-                <td>{{ patient.other_details }}</td>
+                <!-- <td>{{ patient.other_details }}</td> -->
 
                 <td>
                     <div class="div-click-to-go">
@@ -187,9 +187,9 @@
                         {% endif %}
                     </td>
                     <td>{{ patient.dob }}</td>
-                    <td>{{ patient.problem }}</td>
+                    <!-- <td>{{ patient.problem }}</td> -->
               
-                    <td>{{ patient.other_details }}</td>
+                    <!-- <td>{{ patient.other_details }}</td> -->
     
                     <td>
                         <div class="div-click-to-go">

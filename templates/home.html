@@ -105,27 +105,27 @@
 
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Seeing Doctor for</label>
-                <input class="form-control" id="problem" name="problem" rows="3"></input>
+                <textarea class="form-control" id="problem" name="problem" rows="3"></textarea>
             </div>
 
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Medical History</label>
-                <input class="form-control" id="medical_history" name="medical_history" rows="3"></input>
+                <textarea class="form-control" id="medical_history" name="medical_history" rows="3"></textarea>
             </div>
 
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Operation History</label>
-                <input class="form-control" id="operation_history" name="operation_history" rows="3"></input>
+                <textarea class="form-control" id="operation_history" name="operation_history" rows="3"></textarea>
             </div>
 
             <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Other detials</label>
-                <input class="form-control" id="other_details" name="other_details" rows="3"></input>
+                <textarea class="form-control" id="other_details" name="other_details" rows="3"></textarea>
             </div>
 
             <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Contact no.</label>
-                <input type="text" class="form-control" id="contact_no" name="contact_no" placeholder="Enter patient name here">
+                <input type="text" class="form-control" id="contact_no" name="contact_no" placeholder="Enter patient's contact no.">
             </div>
 
             <div class="mb-3">
@@ -159,10 +159,10 @@
                     <th>Contact N0.</th>
                     <th>Gender</th>
                     <th>Dob</th>
-                    <th>Diagnos</th>
+                    <!-- <th>Diagnos</th> -->
                
-                    <th>Other Detail</th>
-                    <th>Add treatment details</th>
+                    <!-- <th>Other Detail</th> -->
+                    <th style="text-align:center" >Add treatment details</th>
                 </tr>
             </thead>
 
@@ -178,7 +178,7 @@
                         <th scope="row">0</th>
                         <td> 
                             {% if patient.img.url != ''  %}
-                                <img class="patient-pi-grid" src="{{ patient.img.url }}" >
+                                <img class="patient-pi-grid" src="{{ patient.img.url }}" alt="" >
 
                             {% else  %}
                                 <img class="patient-pi-grid" src="../static/imgs/default_patient_img.jpg" alt="">
@@ -199,9 +199,9 @@
                         </td>
                         
                         <td>{{ patient.dob }}</td>
-                        <td>{{ patient.problem }}</td>
+                        <!-- <td>{{ patient.problem }}</td> -->
                 
-                        <td>{{ patient.other_details }}</td>
+                        <!-- <td>{{ patient.other_details }}</td> -->
         
                         <td>
                             <div class="div-click-to-go">
@@ -228,7 +228,7 @@
                     <th scope="row">{{ forloop.counter }}</th>
                     <td> 
                         {% if patient.img.url != ''  %}
-                            <img class="patient-pi-grid" src="{{ patient.img.url }}" >
+                            <img class="patient-pi-grid" src="{{ patient.img.url }}" alt="">
 
                         {% else  %}
                             <img class="patient-pi-grid" src="../static/imgs/default_patient_img.jpg" alt="">
@@ -236,7 +236,7 @@
 
                     </td>
                     <td>{{ patient.id }}</td>
-                    <td>{{patient.name}}</td>
+                    <td class="wrap-text-for-td2">{{patient.name}}</td>
                     <td>{{ patient.contact_no}}</td>
                     <td>
                         {% if patient.gender == 'm'  %}
@@ -248,9 +248,9 @@
                         {% endif %}
                     </td>
                     <td>{{ patient.dob }}</td>
-                    <td>{{ patient.problem }}</td>
+                    <!-- <td class="wrap-text-for-td2">{{ patient.problem }}</td> -->
               
-                    <td>{{ patient.other_details }}</td>
+                    <!-- <td class="wrap-text-for-td2">{{ patient.other_details }}</td> -->
     
                     <td>
                         <div class="div-click-to-go">
@@ -353,10 +353,13 @@
                         <div >
                             
                                 {% if patient.img.url != ''  %}
-                                    <img class="patient-pi" src="{{ patient.img.url }}" >
-        
+                                    <!-- <div class="shape circle to-square"> 
+                                        <img style="width: inherit"  src="{{ patient.img.url }}" >   <!-- class="patient-pi" -->
+                                    <!-- </div>  class="patient-pi" --> 
+                                     
+                                    <img class="patient-pi"  src="{{ patient.img.url }}" > 
                                 {% else  %}
-                                    <img class="patient-pi" src="../static/imgs/default_patient_img.jpg" alt="">
+                                    <img class="patient-pi" src="../static/imgs/default_patient_img.jpg" alt=""> 
                                 {% endif %}
         
                             
