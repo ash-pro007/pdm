@@ -58,17 +58,50 @@ def home_lin(request):
 def register_patient(request):
     global treatment_no
     if request.method == "POST":
-        name = request.POST['name']
-        gender = request.POST['gender']
-        dob = request.POST['dob']
-        problem = request.POST['problem']
-        medical_history = request.POST['medical_history']
-        operation_history = request.POST['operation_history']
-        other_details = request.POST['other_details']
-        contact_no = request.POST['contact_no']
+        name = str(request.POST['name'])
+        gender = str(request.POST['gender'])
+        dob = str(request.POST['dob'])
+        problem = str(request.POST['problem'])
+        medical_history = str(request.POST['medical_history'])
+        operation_history = str(request.POST['operation_history'])
+        other_details = str(request.POST['other_details'])
+        contact_no = str(request.POST['contact_no'])
         
+
+        name = name.strip()
+        gender = gender.strip()
+        dob = dob.strip()
+        problem = problem.strip()
+        medical_history = medical_history.strip()
+        operation_history = operation_history.strip()
+        other_details = other_details.strip()
+
         contact_no = contact_no.replace(' ', '')
+        contact_no = contact_no.strip()
+
+
+        if name == '' or name == ' ' or name == None:
+            name = 'Unknown'
+
+        if gender == '' or gender == ' ' or gender == None:
+            gender = 'o'
         
+        if dob == '' or dob == ' ' or dob == None:
+            dob = '1111-11-11'
+
+        if medical_history == '' or medical_history == ' ' or medical_history == None:
+            medical_history = 'NA'
+
+        if operation_history == '' or operation_history == ' ' or operation_history == None:
+            operation_history = 'NA'
+
+        if other_details == '' or other_details == ' ' or other_details == None:
+            other_details = 'NA'
+
+        if contact_no == '' or contact_no == ' ' or contact_no == None:
+            contact_no = '1111111111'
+         
+ 
         try:
             img = request.FILES['img']
         except:
@@ -103,18 +136,20 @@ def register_patient(request):
 
 def change_patient_details(request):
     if request.method == "POST":
-        id = request.POST['patient_id_to_change_data']
+        id = str(request.POST['patient_id_to_change_data'])
 
-        name = request.POST['name']
-        gender = request.POST['gender']
-        dob = request.POST['dob']
-        problem = request.POST['problem']
-        medical_history = request.POST['medical_history']
-        operation_history = request.POST['operation_history']
-        other_details = request.POST['other_details']
-        contact_no = request.POST['contact_no']
+        name = str(request.POST['name'])
+        gender = str(request.POST['gender'])
+        dob = str(request.POST['dob'])
+        problem = str(request.POST['problem'])
+        medical_history = str(request.POST['medical_history'])
+        operation_history = str(request.POST['operation_history'])
+        other_details = str(request.POST['other_details'])
+        contact_no = str(request.POST['contact_no'])
 
         is_img_changed = True
+
+        
 
 
         try:
@@ -334,30 +369,61 @@ def save_treatment_details(request):
 
 
     if request.method == 'POST':
-        problem = request.POST['problem']
-        symptoms = request.POST['symptoms']
+        problem = str(request.POST['problem'])
+        symptoms = str(request.POST['symptoms'])
 
-        treatment_given = request.POST['treatment_given']
-        medicine_prescribed = request.POST['medicine_prescribed']
+        treatment_given = str(request.POST['treatment_given'])
+        medicine_prescribed = str(request.POST['medicine_prescribed'])
 
-        fees_charged = request.POST['fees_charged']
-        fees_paid = request.POST['fees_paid']
+        fees_charged = str(request.POST['fees_charged'])
+        fees_paid = str(request.POST['fees_paid'])
         
-        fees_charged = float(fees_charged)
-        fees_paid = float(fees_paid)
 
-        fees_remaining = fees_charged - fees_paid
+        next_checkup = str(request.POST['next_checkup'])
+        current_checkup_date = str(request.POST['current_checkup_date'])
 
-
-        next_checkup = request.POST['next_checkup']
-        current_checkup_date = request.POST['current_checkup_date']
-
-        remarks = request.POST['remarks']    
+        remarks = str(request.POST['remarks']    )
     
         # next_checkup = '2002-12-12'
 
+        # type-checking for the inputs 
 
+        problem = problem.strip()
+        symptoms = symptoms.strip()
+        treatment_given = treatment_given.strip()
+        medicine_prescribed = medicine_prescribed.strip()
+        remarks = remarks.strip()
+
+        # adding double check
+
+        if problem == '' or problem == None:
+            problem = 'NA'
+
+        if symptoms == '' or symptoms == None:
+            symptoms = 'NA'
+
+        if treatment_given == '' or treatment_given == None:
+            treatment_given = 'NA'
+
+        if medicine_prescribed == '' or medicine_prescribed == None:
+            medicine_prescribed = 'NA'
+
+        if fees_charged == '' or fees_charged == ' ':
+            fees_charged = 0
+
+        if fees_paid == '' or fees_paid == ' ':
+            fees_paid = 0
+
+        if next_checkup == '' or next_checkup == ' ':
+            next_checkup = '1111-11-11'
+
+        if remarks == '' or remarks == None:
+            remarks = 'remarks'
+
+        fees_charged = float(fees_charged)
+        fees_paid = float(fees_paid)
       
+        fees_remaining = fees_charged - fees_paid
         
         last_entry = Patient_treatment_details.objects.last()
 
@@ -371,9 +437,11 @@ def save_treatment_details(request):
         
 
         try:
+            print('patient id in save_treatment() ==---------------->> ', patient_id)
             patient_treatment_details.save()
         except:
-            return patient_details(request)
+            messages.success(request, "Couldn't add treatment details!")
+            return home(request)
 
         treatment_no = 1
 
@@ -417,8 +485,9 @@ def remove_patient(request):
 
 def remove_patient_from_db(request):
     if request.method == 'POST':
-        patient_id = request.POST['patient_id_in']
+        patient_id = str(request.POST['patient_id_in'])
 
+        patient_id = patient_id.strip()
         
     return remove_patient_deletion_performer(request, True, True, patient_id)
     
@@ -442,11 +511,8 @@ def remove_patient_deletion_performer(request, delete_img, remove_record, patien
         if os.path.exists(image_name):
             os.remove(image_name)
 
-        
-
         # Patient.objects._raw_delete(f"""DELETE FROM public."Data_manager_patient" WHERE id = { patient_id } """)
          
-
     Patient.objects.filter(id=patient_id).delete()
 
     if remove_record:
@@ -561,28 +627,90 @@ def change_treatment_details_in_db(request):
     global patient_id
 
     if request.method == "POST":
-        pk = request.POST['pk_for_treatment_detail'] 
+        pk = str(request.POST['pk_for_treatment_detail'] )
+
+
+        print('type of pk => ', type(pk))
+
         # patient_id = str(request.POST.get('patientId', False)).replace(" ", '')
-        n_th_treatment = request.POST['n_th_treatment']
+        n_th_treatment = str(request.POST['n_th_treatment'])
 
-        problem = request.POST['problem']
-        symptoms = request.POST['symptoms']
+        problem = str(request.POST['problem'])
+        symptoms = str(request.POST['symptoms'])
 
-        treatment_given = request.POST['treatment_given']
-        medicine_prescribed = request.POST['medicine_prescribed']
+        treatment_given = str(request.POST['treatment_given'])
+        medicine_prescribed = str(request.POST['medicine_prescribed'])
 
-        fees_charged = request.POST['fees_charged']
-        fees_paid = request.POST['fees_paid']
+        fees_charged = str(request.POST['fees_charged'])
+        fees_paid = str(request.POST['fees_paid'])
+
+        print('type of fee_charged => ', type(fees_charged))
+
+        current_checkup_date = str(request.POST['current_checkup_date'])
+        next_checkup_date = str(request.POST['next_checkup_date'])
+
+        remarks = str(request.POST['remarks'])
+
+
+
+        pk = pk.strip()
+        n_th_treatment = n_th_treatment.strip()
+
+        problem = problem.strip()
+        symptoms = symptoms.strip()
+
+        treatment_given = treatment_given.strip()
+        medicine_prescribed = medicine_prescribed.strip()
+
+        fees_charged = fees_charged.strip()
+        fees_paid = fees_paid.strip()
+
+        current_checkup_date = current_checkup_date.strip()
+        next_checkup_date = next_checkup_date.strip()
+
+        remarks = remarks.strip()
+
+
+        if pk == '' or pk ==' ' or pk == None:
+            pk = 'NA'
+
+        if n_th_treatment == '' or n_th_treatment ==' ' or n_th_treatment == None:
+            n_th_treatment = 'NA'  
+
+        if problem == '' or problem ==' ' or problem == None:
+            problem = 'NA'
+
+        if symptoms == '' or symptoms ==' ' or symptoms == None:
+            symptoms = 'NA'
+        
+        if treatment_given == '' or treatment_given ==' ' or treatment_given == None:
+            treatment_given = 'NA'
+
+
+        if medicine_prescribed == '' or medicine_prescribed ==' ' or medicine_prescribed == None:
+            medicine_prescribed = 'NA'
+
+        if fees_charged == '' or fees_charged ==' ' or fees_charged == None:
+            fees_charged = 'NA'
+
+        if fees_paid == '' or fees_paid ==' ' or fees_paid == None:
+            fees_paid = 'NA'
+
+        if current_checkup_date == '' or current_checkup_date ==' ' or current_checkup_date == None:
+            current_checkup_date = 'NA'
+
+        if next_checkup_date == '' or next_checkup_date ==' ' or next_checkup_date == None:
+            next_checkup_date = 'NA'
+
+        if remarks == '' or remarks ==' ' or remarks == None:
+            remarks = 'NA'
+        
+
 
         fees_charged = float(fees_charged)
         fees_paid = float(fees_paid)
 
         fees_remaining = fees_charged - fees_paid
-
-        current_checkup_date = request.POST['current_checkup_date']
-        next_checkup_date = request.POST['next_checkup_date']
-
-        remarks = request.POST['remarks']
 
         try:
             Patient_treatment_details.objects.filter(id=pk).delete()

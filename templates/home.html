@@ -125,7 +125,7 @@
 
             <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Contact no.</label>
-                <input type="text" class="form-control" id="contact_no" name="contact_no" placeholder="Enter patient's contact no.">
+                <input max="9999999999999" type="number" class="form-control" id="contact_no" name="contact_no" placeholder="Enter patient's contact no.">
             </div>
 
             <div class="mb-3">
@@ -137,7 +137,7 @@
         </form>
 
         <div class="btn-hide-regis-form">
-            <button type="clear" onclick="hideForm()" class="btn btn-primary mb-4 btn-hide-regis-form">Cancel</button>
+            <button type="reset" onclick="hideForm()" class="btn btn-primary mb-4 btn-hide-regis-form">Cancel</button>
         </div>
     </div>
 
@@ -354,7 +354,7 @@
                             
                                 {% if patient.img.url != ''  %}
                                     <!-- <div class="shape circle to-square"> 
-                                        <img style="width: inherit"  src="{{ patient.img.url }}" >   <!-- class="patient-pi" -->
+                                        <img style="width: inherit"  src="{{ patient.img.url }}" >   class="patient-pi" -->
                                     <!-- </div>  class="patient-pi" --> 
                                      
                                     <img class="patient-pi"  src="{{ patient.img.url }}" > 

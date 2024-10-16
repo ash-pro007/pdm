@@ -109,7 +109,7 @@
 
             <div class="mb-3">
                 <label for="exampleFormControlInput1" class="form-label">Contact no.</label>
-                <input type="text" class="form-control" id="contact_no" name="contact_no" value=" {{ patient.contact_no }}">
+                <input type="number" max="9999999999999" class="form-control" id="contact_no" name="contact_no" value=" {{ patient.contact_no }}">
             </div>
 
             <div class="mb-3">
@@ -238,6 +238,10 @@
             {% if total_remaining_amt > 0 %}
 
             <div style="color: rgb(255, 57, 57); margin-top:40px" class="div-heading">Total Fees due: {{ total_remaining_amt }}</div>
+            
+            {% else %}
+            
+            <div style="color: rgba(0, 189, 85, 0.815); margin-top:40px" class="div-heading">All payments are clear</div>
 
             {% endif %}
 
@@ -412,7 +416,12 @@
 
                     <tr>
                         <th>Next checkup date give</th>
+                        {% if detail.next_checkup_date == '1111-11-11' or detail.next_checkup_date == 'Nov. 11, 1111' %}
+                        <td class="text-wrap-for-th">N.A.</td>
+                        {% else %}
                         <td class="text-wrap-for-th">{{ detail.next_checkup_date }}</td>
+                        {% endif %}
+
                     </tr>
 
 
@@ -537,22 +546,22 @@
 
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Dignosis</label>  <!-- Problem in detail -->
-                    <textarea class="form-control" id="problem" name="problem" rows="3"></textarea>
+                    <textarea class="form-control" id="problem" name="problem" rows="3">NA</textarea>
                 </div>
 
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Symptoms</label>  <!-- Problem in detail -->
-                    <textarea class="form-control" id="symptoms" name="symptoms" rows="3"></textarea>
+                    <textarea class="form-control" id="symptoms" name="symptoms" rows="3">NA</textarea>
                 </div>
 
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Treatment given</label>
-                    <textarea class="form-control" id="treatment_given" name="treatment_given" rows="3"></textarea>
+                    <textarea class="form-control" id="treatment_given" name="treatment_given" rows="3">NA</textarea>
                 </div>
 
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Medicine Prescribed</label>
-                    <textarea class="form-control" id="medicine_prescribed" name="medicine_prescribed" rows="3"></textarea>
+                    <textarea class="form-control" id="medicine_prescribed" name="medicine_prescribed" rows="3">NA</textarea>
                 </div>
 
                 <div  class="mb-3">
@@ -568,12 +577,12 @@
 
                 <div  class="mb-3">
                     <label>Fees charged</label>
-                    <input id="fees_charged" name="fees_charged" class="form-control" type="number" required />
+                    <input id="fees_charged" name="fees_charged" class="form-control" type="number" required value="00" />
                 </div>
 
                 <div  class="mb-3">
                     <label>Fees paid</label>
-                    <input id="fees_paid" name="fees_paid" class="form-control" type="number" required onfocusout="show_remaining_fees()" />
+                    <input id="fees_paid" name="fees_paid" class="form-control" type="number" required onfocusout="show_remaining_fees()" value="00"/>
                 </div>
 
 
@@ -585,7 +594,7 @@
 
                 <div class="mb-3">
                     <label for="exampleFormControlTextarea1" class="form-label">Remarks (extra)</label>
-                    <input class="form-control" id="remarks" name="remarks" rows="3" />
+                    <input class="form-control" id="remarks" name="remarks" rows="3" value="NA"/>
                 </div>
 
 
