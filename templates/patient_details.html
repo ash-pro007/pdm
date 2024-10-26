@@ -673,17 +673,24 @@
                     {% endif %}
 
 
-                    {% for data in img_list_of_patient %}
-
-                    <img src="{{ data.trt_img.url }}" alt="Patient Image" />
-
-                        <p> {{data.trt_img }}</p>
-             
-                    {% endfor %}
-
+                    
        
 
                 </table>
+
+                <div style="display: flex-box;">
+                    {% for data in img_list_of_patient %}
+                    <p> {{ details.id }} </p>
+
+                        {% if data.treatment_id == details.id %}
+
+                            <img class="img-preview" src="{{ data.trt_img.url }}" alt="Patient Image" />
+                        {% endif %}
+                            
+            
+                    {% endfor %}
+
+                </div>
 
 
                 <!-- <button onclick="showHideEditTreatmentDetails()" id="{{ detail.n_th_treatment }}" style="width: fit-content;" class="shadow-btn">Edit</button> -->
