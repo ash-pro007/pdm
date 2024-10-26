@@ -22,12 +22,16 @@ body {
 }
 
 
+
 .patient-data-thead {
+    font-size: .8rem;
     color: #02af9e;
 }
 
 .patient-data-tbody {
-    font-weight: 300;
+    font-size: .79rem;
+    font-weight: 500;
+    color: rgb(75, 75, 75);
 }
 
 .patient-pi-grid {
@@ -68,6 +72,12 @@ body {
 }
 
 
+/* --------------------- Register patient form css (mainly upload image) ------------------------ */
+
+
+
+/* ------------------ Register patient form css (mainly upload image) ends ---------------------- */
+
 
 
 
@@ -76,7 +86,7 @@ body {
 
 
 .container-main-div {
-    display: flex;
+    display: block;
 }
 
 
@@ -115,13 +125,15 @@ body {
 
 .field-headings {
     text-align: left;
-    font-size: 0.9rem;
+    font-size: 0.81rem;
     font-weight: bold;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .field-values {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+
 

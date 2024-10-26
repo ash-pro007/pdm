@@ -1,147 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Responsive Navigation Bar</title>
-    <style>
-        /* styles.css */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f9;
-}
 
-.navbar {
-    background-color: #47b3a8;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    position: sticky;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-}
+                    
 
-.navbar-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 10px;
-}
 
-.navbar-brand {
-    color: #fff;
-    font-size: 24px;
-    font-weight: bold;
-    text-decoration: none;
-    animation: slideIn 1s ease-in-out;
-}
+<label for="formFile" class="label-textarea-register-form">Patient's profile picture</label>
+<input style="margin-right:15rem" class="inpt-patient-image" type="file" id="img" name="img">
 
-.navbar-toggler {
-    display: none;
-    font-size: 24px;
-    color: #fff;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
 
-.navbar-menu {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex: 1;
-    transition: transform 0.3s ease-in-out;
-}
 
-.navbar-item {
-    color: #fff;
-    text-decoration: none;
-    padding: 14px 20px;
-    position: relative;
-    transition: color 0.3s;
-    font-weight: 500;
-}
+<div id="patient-registration-form" class="main-container-register-patient-form" >
+    <div class="form-heading">Patient Regisration Form</div>
+    <div class="secondeary-container-resgister-patinet-form">
 
-.navbar-item::before {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background-color: #e74c3c;
-    transition: width 0.3s, left 0.3s;
-}
+        <form  action="{% url 'register_patient' %}" method="post" enctype="multipart/form-data" onsubmit="disableButton();" class="form-container-formm">
+            {% csrf_token %}
 
-.navbar-item:hover::before {
-    width: 100%;
-    left: 0;
-}
+            <div class="mb-4 div-container-input">
+                
+                <label  class="label-input-register-form">Patient Name</label>
+                <input type="text" class="inpt-format-register-form" id="name" name="name" placeholder="Enter patient name ">
 
-.navbar-item:hover {
-    color: #e74c3c;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-    .navbar-toggler {
-        display: block;
-    }
-
-    .navbar-menu {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-        align-items: center;
-    }
-
-    .navbar-menu.active {
-        display: flex;
-        transform: translateY(0);
-    }
-
-    .navbar-item {
-        width: 100%;
-        text-align: center;
-        padding: 14px 0;
-    }
-}
-
-/* Animations */
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-    </style>
-</head>
-<body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a href="#" class="navbar-brand">MyWebsite</a>
-            <button class="navbar-toggler" onclick="toggleMenu()">&#9776;</button>
-            <div class="navbar-menu" id="navbarMenu">
-                <a href="#" class="navbar-item">Home</a>
-                <a href="#" class="navbar-item">About</a>
-                <a href="#" class="navbar-item">Services</a>
-                <a href="#" class="navbar-item">Contact</a>
+                
+                <label  class="inpt-label-placing label-input-register-form" for="cars">Gender</label>
+                <select   class="inpt-format-register-form" name="gender" id="gender">
+                    <option value="m">Male</option>
+                    <option value="f">Female</option>
+                    <option value="o">Other</option>
+                </select>
+               
+                <label class="inpt-label-placing label-input-register-form" for="startDate">Age</label>
+                <input id="age" name="age" class="inpt-format-register-form"  type="number" max="150" />
+                
+                <label class="inpt-label-placing label-input-register-form" for="startDate">First appointment/diagnos</label>
+                <input id="profile_created_on_or_first_diagnos" name="profile_created_on_or_first_diagnos" class="inpt-format-register-form" type="date" />
+        
             </div>
-        </div>
-    </nav>
 
-    <script>
-        function toggleMenu() {
-            const menu = document.getElementById('navbarMenu');
-            menu.classList.toggle('active');
-        }
-    </script>
-</body>
-</html>
+            <hr>
+
+            <div class="mt-4 mb-4">
+
+                <label  class=" label-input-register-form">Contact no.</label>
+                <input max="9999999999999" type="number" class="inpt-format-register-form" id="contact_no" name="contact_no" placeholder="Enter contact no.">
+
+                <label class="inpt-label-placing label-input-register-form">Patient Address</label>
+                <input  id="inpt-registration-form-address-id" type="text" class="inpt-format-register-form" id="address" name="address" placeholder="Enter patient address ">
+
+
+            </div>
+
+            <hr>
+
+
+            <div class="mt-4 mb-5 div-container-textarea ">
+
+                <label  class="label-textarea-register-form">Seeing Doctor for</label>
+                <textarea class="text-area-inpt-register-form" id="problem" name="problem" rows="3"></textarea>
+          
+                <label  class="label-textarea-register-form">Medical History</label>
+                <textarea class="text-area-inpt-register-form" id="medical_history" name="medical_history" rows="3"></textarea>
+        
+            </div>
+            <div  class="mb-5 div-container-textarea ">
+                <label  class="label-textarea-register-form">Operation History</label>
+                <textarea class="text-area-inpt-register-form" id="operation_history" name="operation_history" rows="3"></textarea>
+       
+                <label  class="label-textarea-register-form">Other detials</label>
+                <textarea class="text-area-inpt-register-form" id="other_details" name="other_details" rows="3"></textarea>
+            </div>
+
+            <hr>
+            
+            <div class="mb-3">
+
+                
+
+
+                <label for="formFile" class="label-textarea-register-form">Patient's profile picture</label>
+                <input style="margin-right:15rem" class="inpt-patient-image" type="file" id="img" name="img">
+
+
+
+
+                <button style="border-radius: 50px; " type="submit" class="mr-5 btn btn-primary btn-submit-regis-form register-form-btn-shape">Submit</button>
+
+                <button style="border-radius: 50px;" type="reset" onclick="hideForm()" class="ml-5 btn btn-danger btn-hide-regis-form register-form-btn-shape">Cancel</button>
+            </div>
+
+        </form>
+
+
+    </div>
+
+</div>

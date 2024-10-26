@@ -1,3 +1,8 @@
 super user => ash007 0170
 
 user => user11 User@0170
+
+command to execute all commands in 1 go : C:\Windows\System32\cmd.exe /k D: & cd My_Data\Development\Projects\Med_Data_Manager2\pdm & workon testMedDataMan & python manage.py runserver
+
+
+C:\Windows\System32\cmd.exe /k http://localhost:8000/

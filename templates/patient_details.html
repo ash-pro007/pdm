@@ -18,6 +18,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    
+    <!-- ---------------- Cooper Libraray for js  ----------------- -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+    <!-- -------------- Cooper Libraray for js ends  -------------- -->
+
+
+
     
     <style>
         a:hover { text-decoration: none; }
@@ -25,6 +37,26 @@
         a {
             outline: none;
         }
+
+
+        #image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .img-preview {
+            max-width: 150px;
+            max-height: 150px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #ddd;
+            padding: 5px;
+            border-radius: 5px;
+            object-fit: cover;
+            cursor: pointer; /* Show that the image is clickable */
+        }
+
     </style>
 
 </head>
@@ -51,7 +83,7 @@
     
     <!-- ---------------------- Form to Change Patient's details ---------------------- -->
     
-    <div id="change-patient-details-form" class="div-form-container" style="display: none;" >
+    <!-- <div id="change-patient-details-form" class="main-container-register-patient-form" style="display: none;" >
         <div class="form-heading">Change Patient's details</div>
         <form  action="{% url 'change_patient_details' %}" method="post" enctype="multipart/form-data" onsubmit="disableButton();" class="form-container-formm">
             {% csrf_token %}
@@ -83,8 +115,8 @@
             </div>
 
             <div  class="mb-3">
-                <label for="startDate">Data of Birth:  {{ patient.dob }}</label>
-                <input id="dob" name="dob" class="form-control" type="date" value="{{ dob }}"/>
+                <label for="startDate">Age:  {{ patient.age }}</label>
+                <input id="age" name="age" class="form-control" type="number" max="150"  value="{{ age }}"/>
             </div>
 
             <div class="mb-3">
@@ -123,7 +155,123 @@
         <div class="btn-hide-regis-form">
             <button type="reset" onclick="showChangePatientForm()" class="btn btn-primary mb-4 btn-hide-regis-form">Cancel</button>
         </div>
+    </div> -->
+
+
+    <div id="change-patient-details-form" class="main-container-register-patient-form" >
+        <div class="form-heading">Change Patient Detail Form</div>
+        <div class="secondeary-container-resgister-patinet-form">
+
+            <form id="change-patient-detials-form"  action="{% url 'change_patient_details' %}" method="post" enctype="multipart/form-data" onsubmit="disableButton();" class="">
+                {% csrf_token %}
+
+                <input type="text" style="display: none;" value="{{ patient.id }}" id="patient_id_to_change_data" name="patient_id_to_change_data">
+
+                <div class="mb-4 div-container-input">
+                    
+                    <label  class="label-input-register-form">Patient Name</label>
+                    <input type="text" class="inpt-format-register-form" id="name" name="name" placeholder="Enter patient name " value="{{ patient.name }}">
+
+                    
+                    <label  class="inpt-label-placing label-input-register-form" for="cars">Gender</label>
+                    <select   class="inpt-format-register-form" name="gender" id="gender">
+                        <option value="">
+                            {% if patient.gender == 'm'  %}
+                                Male
+                            {% elif patient.gender == 'f'  %}
+                                Female
+                            {% else %} 
+                                Other
+                            {% endif %}
+                        </option>
+                        <option value="m">Male</option>
+                        <option value="f">Female</option>
+                        <option value="o">Other</option>
+                    </select>
+                   
+                    <label class="inpt-label-placing label-input-register-form" for="startDate">Age</label>
+                    <input id="age" name="age" class="inpt-format-register-form"  type="number" max="150" value="{{ patient.age }}" />
+                    
+                    <label class="inpt-label-placing label-input-register-form" for="startDate">First appointment/diagnos</label>
+                    <input id="profile_created_on_or_first_diagnos" name="profile_created_on_or_first_diagnos" class="inpt-format-register-form" type="date" value="{{ profile_created_on_or_first_diagnos }}" />
+            
+                </div>
+
+                <hr>
+
+                <div class="mt-4 mb-4">
+
+                    <label  class=" label-input-register-form">Contact no.</label>
+                    <input max="9999999999999" type="number" class="inpt-format-register-form" id="contact_no" name="contact_no" placeholder="Enter contact no." value="{{ patient.contact_no }}">
+
+                    <label class="inpt-label-placing label-input-register-form">Patient Address</label>
+                    <input  id="inpt-registration-form-address-id" type="text" class="inpt-format-register-form" id="address" name="address" value="{{ patient.address }}">
+
+
+                </div>
+
+                <hr>
+
+
+                <div class="mt-4 mb-5 div-container-textarea ">
+
+                    <label  class="label-textarea-register-form">Seeing Doctor for</label>
+                    <textarea class="text-area-inpt-register-form" id="problem" name="problem" rows="3">{{ patient.problem }}</textarea>
+              
+                    <label  class="label-textarea-register-form">Medical History</label>
+                    <textarea class="text-area-inpt-register-form" id="medical_history" name="medical_history" rows="3">{{ patient.medical_history }}</textarea>
+            
+                </div>
+                <div  class="mb-5 div-container-textarea ">
+                    <label  class="label-textarea-register-form">Operation History</label>
+                    <textarea class="text-area-inpt-register-form" id="operation_history" name="operation_history" rows="3">{{ patient.operation_history }}</textarea>
+           
+                    <label  class="label-textarea-register-form">Other detials</label>
+                    <textarea class="text-area-inpt-register-form" id="other_details" name="other_details" rows="3">{{ patient.other_details }}</textarea>
+                </div>
+
+                <hr>
+                
+                <div class="mb-3">
+
+                    <!-- ------------------------------ image previewer  ------------------------------ -->
+
+                    <input type="file" id="imageUpload" name="image" accept="image/*" onchange="previewImage(event)">
+        
+                    <!-- Cropping area -->
+                    <div style="display: none;" id="cropContainer" class="cropped-image-container">
+                        <img id="imagePreview" style="max-width: 100%;">
+                    </div>
+                    
+                    <!-- Hidden field to store cropped image data -->
+                    <input type="hidden" id="croppedImage" name="cropped_image">
+
+                    <!-- --------------------------- image previewer ends  ---------------------------- -->
+                    
+                <hr>
+                  <div class="container-all-form-btns">
+                    
+                    <button style="display: none; border-radius: 50px; margin-right:10rem" id='btn-submit-registration-form-with-image-id' class=" btn btn-primary btn-submit-regis-form register-form-btn-shape" type="button" onclick="cropImage()">Submit</button>
+                      
+
+                    <button id='btn-submit-registration-form-without-image-id' style="border-radius: 50px; " type="submit" class="mr-5 btn btn-primary btn-submit-regis-form register-form-btn-shape">Submit</button>
+                    
+
+                    <button style="border-radius: 50px;" type="reset"  onclick="showChangePatientForm()" class="ml-5 btn btn-danger btn-hide-regis-form register-form-btn-shape">Cancel</button>
+                  </div>
+                </div>
+
+
+            
+                
+                
+            </form>
+    
+
+        </div>
+
     </div>
+
 
     <!-- ---------------------- Form to change patient details ends here ---------------------- -->
     
@@ -165,10 +313,7 @@
                             <th class="field-headings">Name</th>
                             <td class="field-values">{{ patient.name }}</td>
                         </tr>
-                        <tr >
-                            <th class="field-headings">Contact No. </th>
-                            <td class="field-values">  {{ patient.contact_no }}</td>
-                        </tr>
+                       
                         <tr >
                             <th class="field-headings">Gender</th>
                             <td class="field-values">
@@ -182,8 +327,8 @@
                             </td>
                         </tr>
                         <tr >
-                            <th class="field-headings">Dob</th>
-                            <td class="field-values">{{ patient.dob }}</td>
+                            <th class="field-headings">Age</th>
+                            <td class="field-values">{{ patient.age }}</td>
                         </tr>
                     </table>
                     <!-- <div>contact no: 018318230</div>
@@ -221,16 +366,29 @@
                     <th class="field-headings">Other details: </th>
                     <td class="field-values">{{ patient.other_details }}</td>
                 </tr>
+
+                <tr >
+                    <th class="field-headings">Contact No. </th>
+                    <td class="field-values">  {{ patient.contact_no }}</td>
+                </tr>
+
+                <tr >
+                    <th class="field-headings">Address </th>
+                    <td class="field-values">  {{ patient.address }}</td>
+                </tr>
+
+
+
             </table>
     
             <div class="div-click-to-go">
                 {% csrf_token %}
     
               
-                <a style="color: #47b3a8;" class="shadow-btn-2" onclick="showChangePatientForm()">Click to edit Profile</a>   
+                <a id="btn-edt-profile" style="color: #47b3a8;" class="shadow-btn-2 btn-edt-profile" onclick="showChangePatientForm()">Click to edit Profile</a>   
 
                 
-                <a href="#" onclick="showForm()" style="margin-top: 20px;" class="shadow-btn-2" >Add treatment for patient</a>
+                <a id="btn-add-treatment"  href="#" onclick="showForm()" style="margin-top: 20px;  width: 15rem;" class="shadow-btn-2" >Add treatment for patient</a>
               
             </div>
     
@@ -270,19 +428,54 @@
                         </tr>
     
                         <tr>
-                            <th>Problem in detail</th>
-                            <td class="text-wrap-for-th">{{ detail.problem_detail }}</td>
+                            <th class="tr-treatment-heading">Problem in detail</th>
+                            <td class="text-wrap-for-th tr-treatment-field">{{ detail.problem_detail }}</td>
                         </tr>
+
+                        <tr>
+                            <th class="tr-treatment-heading">Symptoms</th>
+                            <td class="text-wrap-for-th tr-treatment-field">{{ detail.symptoms }}</td>
+                        </tr>    
+
+
+                        <tr>
+                            <th class="tr-treatment-heading">Blood Pressure</th>
+                            <td class="text-wrap-for-th tr-treatment-field"><label class="label-show-patient-details-field" for="">{{ detail.blood_pressure }} (mmHg)</label></td>
+                        </tr>    
+                        
+                        <tr>
+                            <th class="tr-treatment-heading">Oxygen</th>
+                            <td class="text-wrap-for-th tr-treatment-field"><label class="label-show-patient-details-field" for="">{{ detail.oxygen }} (mm Hg)</label></td>
+                        </tr>
+
+                        <tr>
+                            <th class="tr-treatment-heading">Pulse</th>
+                            <td class="text-wrap-for-th tr-treatment-field"><label class="label-show-patient-details-field" for="">{{ detail.pulse }} (bpm)</label></td>
+                        </tr>
+
+                        <tr>
+                            <th class="tr-treatment-heading">Sugar</th>
+                            <td class="text-wrap-for-th tr-treatment-field"><label class="label-show-patient-details-field" for="">{{ detail.sugar }} (mmol/L  or  mg/dL)</label></td>
+                        </tr>
+
+                        <tr>
+                            <th class="tr-treatment-heading">Weight</th>
+                            <td class="text-wrap-for-th tr-treatment-field"><label class="label-show-patient-details-field" for="">{{ detail.weight }} (kgs)</label></td>
+                        </tr>
+                        
+
+                       
+                        
     
                         <tr >
-                            <th>Treatment given</th>
-                            <td class="text-wrap-for-th">{{ detail.treatment_given }}</td>
+                            <th class="tr-treatment-heading">Treatment given</th>
+                            <td class="text-wrap-for-th tr-treatment-field">{{ detail.treatment_given }}</td>
                         </tr>
     
     
                         <tr>
-                            <th>Medicine prescribed</th>
-                            <td class="text-wrap-for-th">{{ detail.medicine_prescribed }}</td>
+                            <th class="tr-treatment-heading">Medicine prescribed</th>
+                            <td class="text-wrap-for-th tr-treatment-field">{{ detail.medicine_prescribed }}</td>
                         </tr>
     
                         
@@ -292,19 +485,19 @@
     
     
                         <tr>
-                            <th>Date on treatemnt given</th>
-                            <td class="text-wrap-for-th">{{ detail.current_checkup_date }}</td>
+                            <th class="tr-treatment-heading">Date on treatemnt given</th>
+                            <td class="text-wrap-for-th tr-treatment-field">{{ detail.current_checkup_date }}</td>
                         </tr>
     
                         <tr>
-                            <th>Next checkup date give</th>
-                            <td class="text-wrap-for-th">{{ detail.next_checkup_date }}</td>
+                            <th class="tr-treatment-heading">Next checkup date give</th>
+                            <td class="text-wrap-for-th tr-treatment-field">{{ detail.next_checkup_date }}</td>
                         </tr>
     
     
                         <tr>
-                            <th>Remarks (Extra)</th>
-                            <td class="text-wrap-for-th">{{ detail.remarks }}</td>
+                            <th class="tr-treatment-heading">Remarks (Extra)</th>
+                            <td class="text-wrap-for-th tr-treatment-field">{{ detail.remarks }}</td>
                         </tr>
     
                         <tr >
@@ -312,36 +505,32 @@
                         </tr>
     
                         <tr>
-                            <th>Fees charged</th>
-                            <td class="text-wrap-for-th">{{ detail.fees_charged }}</td>
+                            <th class="tr-treatment-heading">Fees charged</th>
+                            <td class="text-wrap-for-th tr-treatment-field">{{ detail.fees_charged }}</td>
                         </tr>
     
     
                         <tr>
-                            <th>Fees paid</th>
-                            <td class="text-wrap-for-th">{{ detail.fees_paid }}</td>
+                            <th class="tr-treatment-heading">Fees paid</th>
+                            <td class="text-wrap-for-th tr-treatment-field">{{ detail.fees_paid }}</td>
                         </tr>
     
                         {% if detail.fees_remaining > 0 %}
                         <tr class="fees-remaining-red-background">
                             <th>Fees remaining</th>
-                            <td class="text-wrap-for-th">{{ detail.fees_remaining }}</td>
+                            <td class="text-wrap-for-th tr-treatment-field">{{ detail.fees_remaining }}</td>
                         </tr>
 
                         {% else %}
 
                         <tr>
-                            <th>Fees remaining</th>
-                            <td class="text-wrap-for-th">{{ detail.fees_remaining }}</td>
+                            <th class="tr-treatment-heading">Fees remaining</th>
+                            <td class="text-wrap-for-th tr-treatment-field">{{ detail.fees_remaining }}</td>
                         </tr>
 
                         {% endif %}
     
-                        <tr >
-                            <td><br></td>
-                        </tr>
-    
-    
+           
     
                     </table>
 
@@ -369,7 +558,6 @@
 
             <div class="div-conatiner-all-treatment-details">
 
-                
 
                 <table class="table">
                     <tr class="treatment-no-st" >
@@ -382,25 +570,54 @@
                     </tr>
 
                     <tr>
-                        <th>Diagnos</th>
-                        <td class="text-wrap-for-th">{{ detail.problem_detail }}</td>
+                        <th class="tr-treatment-heading">Problem in detail</th>
+                        <td class="text-wrap-for-th tr-treatment-field">{{ detail.problem_detail }}</td>
                     </tr>
 
                     <tr>
-                        <th>Symptoms</th>
-                        <td class="text-wrap-for-th">{{ detail.symptoms }}</td>
+                        <th class="tr-treatment-heading">Symptoms</th>
+                        <td class="text-wrap-for-th tr-treatment-field">{{ detail.symptoms }}</td>
+                    </tr>    
+
+
+                    <tr>
+                        <th class="tr-treatment-heading">Blood Pressure</th>
+                        <td class="text-wrap-for-th tr-treatment-field"><label class="label-show-patient-details-field" for="">{{ detail.blood_pressure }} (mmHg)</label></td>
+                    </tr>    
+                    
+                    <tr>
+                        <th class="tr-treatment-heading">Oxygen</th>
+                        <td class="text-wrap-for-th tr-treatment-field"><label class="label-show-patient-details-field" for="">{{ detail.oxygen }} (mm Hg)</label></td>
                     </tr>
 
+                    <tr>
+                        <th class="tr-treatment-heading">Pulse</th>
+                        <td class="text-wrap-for-th tr-treatment-field"><label class="label-show-patient-details-field" for="">{{ detail.pulse }} (bpm)</label></td>
+                    </tr>
+
+                    <tr>
+                        <th class="tr-treatment-heading">Sugar</th>
+                        <td class="text-wrap-for-th tr-treatment-field"><label class="label-show-patient-details-field" for="">{{ detail.sugar }} (mmol/L  or  mg/dL)</label></td>
+                    </tr>
+
+                    <tr>
+                        <th class="tr-treatment-heading">Weight</th>
+                        <td class="text-wrap-for-th tr-treatment-field"><label class="label-show-patient-details-field" for="">{{ detail.weight }} (kgs)</label></td>
+                    </tr>
+                    
+
+                   
+                    
 
                     <tr >
-                        <th>Treatment given</th>
-                        <td class="text-wrap-for-th">{{ detail.treatment_given }}</td>
+                        <th class="tr-treatment-heading">Treatment given</th>
+                        <td class="text-wrap-for-th tr-treatment-field">{{ detail.treatment_given }}</td>
                     </tr>
 
 
                     <tr>
-                        <th>Medicine prescribed</th>
-                        <td class="text-wrap-for-th">{{ detail.medicine_prescribed }}</td>
+                        <th class="tr-treatment-heading">Medicine prescribed</th>
+                        <td class="text-wrap-for-th tr-treatment-field">{{ detail.medicine_prescribed }}</td>
                     </tr>
 
                     
@@ -410,24 +627,19 @@
 
 
                     <tr>
-                        <th>Date on treatemnt given</th>
-                        <td class="text-wrap-for-th">{{ detail.current_checkup_date }}</td>
+                        <th class="tr-treatment-heading">Date on treatemnt given</th>
+                        <td class="text-wrap-for-th tr-treatment-field">{{ detail.current_checkup_date }}</td>
                     </tr>
 
                     <tr>
-                        <th>Next checkup date give</th>
-                        {% if detail.next_checkup_date == '1111-11-11' or detail.next_checkup_date == 'Nov. 11, 1111' %}
-                        <td class="text-wrap-for-th">N.A.</td>
-                        {% else %}
-                        <td class="text-wrap-for-th">{{ detail.next_checkup_date }}</td>
-                        {% endif %}
-
+                        <th class="tr-treatment-heading">Next checkup date give</th>
+                        <td class="text-wrap-for-th tr-treatment-field">{{ detail.next_checkup_date }}</td>
                     </tr>
 
 
                     <tr>
-                        <th>Remarks (Extra)</th>
-                        <td class="text-wrap-for-th">{{ detail.remarks }}</td>
+                        <th class="tr-treatment-heading">Remarks (Extra)</th>
+                        <td class="text-wrap-for-th tr-treatment-field">{{ detail.remarks }}</td>
                     </tr>
 
                     <tr >
@@ -435,36 +647,41 @@
                     </tr>
 
                     <tr>
-                        <th>Fees charged</th>
-                        <td class="text-wrap-for-th">{{ detail.fees_charged }}</td>
+                        <th class="tr-treatment-heading">Fees charged</th>
+                        <td class="text-wrap-for-th tr-treatment-field">{{ detail.fees_charged }}</td>
                     </tr>
 
 
                     <tr>
-                        <th>Fees paid</th>
-                        <td class="text-wrap-for-th">{{ detail.fees_paid }}</td>
+                        <th class="tr-treatment-heading">Fees paid</th>
+                        <td class="text-wrap-for-th tr-treatment-field">{{ detail.fees_paid }}</td>
                     </tr>
 
                     {% if detail.fees_remaining > 0 %}
                     <tr class="fees-remaining-red-background">
                         <th>Fees remaining</th>
-                        <td class="text-wrap-for-th">{{ detail.fees_remaining }}</td>
+                        <td class="text-wrap-for-th tr-treatment-field">{{ detail.fees_remaining }}</td>
                     </tr>
 
                     {% else %}
 
                     <tr>
-                        <th>Fees remaining</th>
-                        <td class="text-wrap-for-th">{{ detail.fees_remaining }}</td>
+                        <th class="tr-treatment-heading">Fees remaining</th>
+                        <td class="text-wrap-for-th tr-treatment-field">{{ detail.fees_remaining }}</td>
                     </tr>
 
                     {% endif %}
 
-                    <tr >
-                        <td><br></td>
-                    </tr>
 
+                    {% for data in img_list_of_patient %}
 
+                    <img src="{{ data.trt_img.url }}" alt="Patient Image" />
+
+                        <p> {{data.trt_img }}</p>
+             
+                    {% endfor %}
+
+       
 
                 </table>
 
@@ -527,91 +744,272 @@
 
     <!-- ------------------------ Form Add treatment details ------------------------ -->
     
-    <div id="patient-treatment-detail-form" class="div-form-container" style="display: none;" >
-        <div class="form-heading">Patient Treatment</div>
-            <form  action="{% url 'save_treatment_details' %}" method="post" enctype="multipart/form-data" onsubmit="disableButton();" class="form-container-formm">
+    
+
+
+    <div style="display: none;" id="patient-treatment-detail-form"  class="main-container-register-patient-form" >
+
+        <div class="form-heading">Add Treatment for Patient</div>
+
+        <div class="secondeary-container-resgister-patinet-form">
+
+            <form id="change-patient-detials-form"  action="{% url 'save_treatment_details' %}" method="post" enctype="multipart/form-data" onsubmit="disableButton();" class="">
                 {% csrf_token %}
-                <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Patient Name: {{ patient.name }} </label>
-                </div>
-        
-                <div >
-                    <label  class="form-label" >Id: {{ patient.id }}</label>
-                </div>
+            
+                <div class="mb-4 div-container-input">
+                    <label  class="label-add-trt-show-det-heading">Patient Name: </label>
+                    <label  class="mr-5 label-add-trt-show-det-field">{{ patient.name }} </label>
 
-                <div >
-                    <label  class="form-label" >Treatment no. : {{ treatment_no }}</label>
-                </div>
-                
+                    <label  class="label-add-trt-show-det-heading" >Id: </label>
+                    <label  class="mr-5 label-add-trt-show-det-field">{{ patient.id }}</label>
 
-                <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Dignosis</label>  <!-- Problem in detail -->
-                    <textarea class="form-control" id="problem" name="problem" rows="3">NA</textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Symptoms</label>  <!-- Problem in detail -->
-                    <textarea class="form-control" id="symptoms" name="symptoms" rows="3">NA</textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Treatment given</label>
-                    <textarea class="form-control" id="treatment_given" name="treatment_given" rows="3">NA</textarea>
-                </div>
-
-                <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Medicine Prescribed</label>
-                    <textarea class="form-control" id="medicine_prescribed" name="medicine_prescribed" rows="3">NA</textarea>
-                </div>
-
-                <div  class="mb-3">
-                    <label for="startDate">Current check date</label>
-                    <input id="current_checkup_date" name="current_checkup_date" class="form-control"  type="date" required />
-                </div>
-
-                <div  class="mb-3">
-                    <label for="startDate">Next check up date</label>
-                    <input id="next_checkup" name="next_checkup" class="form-control" type="date"  />
+                    <label  class="label-add-trt-show-det-heading" >Treatment no. : </label>
+                    <label  class="label-add-trt-show-det-field" >{{ treatment_no }}</label>
                 </div>
                 
+                <hr>
+                
+                <div class="mb-5 div-container-textarea">
+                    <label class="label-textarea-register-form">Dignosis</label>  <!-- Problem in detail -->
+                    <textarea class="text-area-inpt-register-form" id="problem" name="problem" rows="3">NA</textarea>
 
-                <div  class="mb-3">
-                    <label>Fees charged</label>
-                    <input id="fees_charged" name="fees_charged" class="form-control" type="number" required value="00" />
+                    <label class="label-textarea-register-form">Symptoms</label>  <!-- Problem in detail -->
+                    <textarea class="text-area-inpt-register-form" id="symptoms" name="symptoms" rows="3">NA</textarea>
                 </div>
 
-                <div  class="mb-3">
-                    <label>Fees paid</label>
-                    <input id="fees_paid" name="fees_paid" class="form-control" type="number" required onfocusout="show_remaining_fees()" value="00"/>
+                <hr>
+
+                <div class="mb-4 div-container-input">
+                    
+                    <label class="label-input-register-form">Blood Pressure</label>
+                    <input type="number" class="mr-5 inpt-format-register-form input-vital-class" id="blood_pressure" name="blood_pressure" placeholder="">
+                    
+                    <label class="label-input-register-form">Oxygen</label>
+                    <input type="number" class="mr-5 inpt-format-register-form input-vital-class" id="oxygen" name="oxygen" placeholder="">
+
+                    <label  class="label-input-register-form">Pulse</label>
+                    <input type="number" class="mr-5 inpt-format-register-form input-vital-class" id="pulse" name="pulse" placeholder="">
+
+
+                    <label  class="label-input-register-form">Sugar</label>
+                    <input type="number" class="mr-5 inpt-format-register-form input-vital-class" id="sugar" name="sugar" placeholder="">
+
+                    <label  class="label-input-register-form">Weight</label>
+                    <input type="number" class="mr-5 inpt-format-register-form input-vital-class" id="weight" name="weight" placeholder="">
+
+                    
+                    <div class="mt-5 mb-5 div-container-textarea">
+                        <label  class="mr-2 label-input-register-form">Vitals (Extra)</label>
+                        <textarea class="text-area-inpt-register-form" id="vital_extra" name="vital_extra" rows="3">NA</textarea>
+                    </div>
+                    
                 </div>
 
+                <hr>
 
-                <div  class="mb-3">
-                    <label>Remaining fees</label>
-                    <input  id="fees_remaining" name="fees_remaining" class="form-control" type="number" value="" disabled onclick="show_remaining_fees()" />
+                <div class="mb-5 div-container-textarea">
+                    <label class="label-textarea-register-form">Treatmentment Given</label>  <!-- Problem in detail -->
+                    <textarea class="text-area-inpt-register-form" id="treatment_given" name="treatment_given" rows="3">NA</textarea>
+
+                    <label class="label-textarea-register-form">Medical Prescribed</label>  <!-- Problem in detail -->
+                    <textarea class="text-area-inpt-register-form"  id="medicine_prescribed" name="medicine_prescribed" rows="3">NA</textarea>
                 </div>
-
-
-                <div class="mb-3">
-                    <label for="exampleFormControlTextarea1" class="form-label">Remarks (extra)</label>
-                    <input class="form-control" id="remarks" name="remarks" rows="3" value="NA"/>
-                </div>
-
-
+                    
+                <hr>
                 
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="mb-4 div-container-input">
+
+                    <label class="mt-2 label-input-register-form" for="startDate">Current checkup date</label>
+                    <input id="mt-2 current_checkup_date" name="current_checkup_date" class="inpt-format-register-form" type="date" />
+
+                    <label class="inpt-label-placing label-input-register-form" for="startDate">Next checkup date</label>
+                    <input id="next_checkup" name="next_checkup" class="inpt-format-register-form" type="date" />
+            
+              
+                </div>
+
+                <hr>
+
+                <div class="mb-4 div-container-input">
+                    
+                    <label class="label-input-register-form">Fess charged</label>
+                    <input type="number" class="mr-5 inpt-format-register-form input-vital-class" id="fees_charged" name="fees_charged" placeholder="">
+                    
+                    <label class="label-input-register-form">Fees paid</label>
+                    <input type="number" class="mr-5 inpt-format-register-form input-vital-class"  id="fees_paid" name="fees_paid" placeholder="">
+
+                    <label  class="label-input-register-form">remaining</label>
+                    <input type="number" class="mr-5 inpt-format-register-form input-vital-class" id="fees_remaining" name="fees_remaining" placeholder="" value="" disabled onclick="show_remaining_fees()" >
+
+
+                </div>
+
+                <hr>
+
+                <div class="mt-5 mb-5 div-container-textarea">
+                    <label class="label-textarea-register-form">Remarks</label>  <!-- Problem in detail -->
+                    <textarea class="text-area-inpt-register-form" id="remarks" name="remarks" rows="3">NA</textarea>
+
+                    
+                </div>
+
+                <hr>
+
+                <div>
+                    <label for="images">Upload Images:</label>
+                    <input type="file" id="images" name="images" multiple onchange="previewImages();" style="display:none;">
+                    <button type="button" onclick="document.getElementById('images').click();">Select Images</button>
+                
+                    <div id="image-preview-container"></div>
+
+                    <hr>
+                
+                    <button style="border-radius: 50px;" class="mt-5 ml-5 btn btn-primary btn-submit-regis-form register-form-btn-shape" type="submit">Submit</button>
+
+                    <button style="border-radius: 50px;" type="reset" onclick="showForm()" class="mt-5 btn btn-danger btn-hide-regis-form register-form-btn-shape">Cancel</button>
+
+                
+                </div>
+                    
+
+
             </form>
 
-        <button type="reset" onclick="showForm()" class="btn btn-primary mb-4 btn-hide-regis-form">Cancel</button>
-
-        <button type="reset" onclick="show_remaining_fees()" class="btn btn-primary mb-4 btn-hide-regis-form">show</button>
+        </div>
 
     </div>
 
 
 
     <!-- --------------------- Add treatment details ends ---------------------- -->
+    
+
+    <!-- -------------------------- Script ->> ------------------------------ -->
+
+
+
+    <!-- ---------------------------- Script for image preview ---------------------------- -->
+
+    <script>
+
+        let cropper;
+
+        // Preview and initialize cropper on image upload
+        function previewImage(event) {
+
+            document.getElementById('btn-submit-registration-form-without-image-id').style.display = 'none';
+            document.getElementById('btn-submit-registration-form-with-image-id').style.display = 'block';
+
+            const imagePreview = document.getElementById('imagePreview');
+            const cropContainer = document.getElementById('cropContainer');
+            imagePreview.src = URL.createObjectURL(event.target.files[0]);
+            cropContainer.style.display = 'block';
+
+            // Initialize Cropper
+            if (cropper) cropper.destroy();
+            cropper = new Cropper(imagePreview, {
+                aspectRatio: 1,  // Ensure symmetrical cropping (1:1 aspect ratio)
+                viewMode: 1,
+            });
+        }
+
+        // Crop image and submit form
+        function cropImage() {
+            if (cropper) {
+                const croppedCanvas = cropper.getCroppedCanvas({
+                    width: 300,
+                    height: 300,
+                });
+
+                // Convert canvas to base64 image data
+                document.getElementById('croppedImage').value = croppedCanvas.toDataURL('image/jpeg');
+                
+                // Submit form
+                document.getElementById('change-patient-detials-form').submit();
+            }
+        }
+    </script>
+
+
+
+    <script>
+                
+        let selectedFiles = [];
+
+        function previewImages() {
+            const previewContainer = document.getElementById('image-preview-container');
+            const inputFiles = Array.from(document.getElementById('images').files);
+
+            // Add only the newly selected files to the array
+            selectedFiles = [...inputFiles];
+
+            // Clear the preview container to prevent duplication
+            previewContainer.innerHTML = '';
+
+            // Loop through selectedFiles to display them
+            selectedFiles.forEach((file, index) => {
+                if (file.type.startsWith('image/')) {
+                    const imgElement = document.createElement("img");
+                    imgElement.classList.add("img-preview");
+                    imgElement.file = file;
+                    imgElement.dataset.index = index;
+
+                    // Add onclick to allow removing the image
+                    imgElement.onclick = function() {
+                        removeImage(index);
+                    };
+
+                    previewContainer.appendChild(imgElement);
+
+                    const reader = new FileReader();
+                    reader.onload = (function(aImg) {
+                        return function(e) {
+                            aImg.src = e.target.result;
+                        };
+                    })(imgElement);
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+// Function to remove an image from selectedFiles array
+        function removeImage(index) {
+            // Remove the selected image from the array
+            selectedFiles.splice(index, 1);
+
+            // Trigger previewImages to update the preview
+            updatePreview();
+        }
+
+        function updatePreview() {
+            const previewContainer = document.getElementById('image-preview-container');
+            previewContainer.innerHTML = '';
+
+            selectedFiles.forEach((file, index) => {
+                if (file.type.startsWith('image/')) {
+                    const imgElement = document.createElement("img");
+                    imgElement.classList.add("img-preview");
+                    imgElement.file = file;
+                    imgElement.dataset.index = index;
+
+                    imgElement.onclick = function() {
+                        removeImage(index);
+                    };
+
+                    previewContainer.appendChild(imgElement);
+
+                    const reader = new FileReader();
+                    reader.onload = (function(aImg) {
+                        return function(e) {
+                            aImg.src = e.target.result;
+                        };
+                    })(imgElement);
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    </script>
 
 
     <script>

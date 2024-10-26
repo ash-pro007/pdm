@@ -1,5 +1,5 @@
-from django.contrib import admin
-from django.urls import path, include
+from django.contrib import admin # type: ignore
+from django.urls import path, include # type: ignore
 from . import views
 
 
@@ -21,6 +21,8 @@ urlpatterns = [
 
     path('show_searched_patient', views.show_searched_patient, name='show_searched_patient'),
     path('show_searched_patient_for_remove_patient', views.show_searched_patient_for_remove_patient, name='show_searched_patient_for_remove_patient'),
+
+    path('show_searched_patient_by_date_range', views.show_searched_patient_by_date_range, name='show_searched_patient_by_date_range'),
 
     path('save_treatment_details', views.save_treatment_details, name='save_treatment_details'),
     path('home/show_searched_patient', views.show_searched_patient, name='show_searched_patient'),

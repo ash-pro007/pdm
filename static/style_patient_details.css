@@ -66,13 +66,13 @@ body {
 
 .field-headings {
     text-align: left;
-    font-size: 0.9rem;
-    font-weight: bold;
+    font-size: 0.7rem;
+    font-weight: 500;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .field-values {
-    font-size: 0.8rem;
+    font-size: 0.68rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -102,6 +102,17 @@ th, td {
 }
 
 
+#btn-edt-profile {
+    width: 15rem;
+    margin-left: -50px;
+}
+
+#btn-add-treatment{
+    width: 15rem;
+    margin-left: -50px;
+}
+
+
 
 /* -------------- show treatment details -------------- */
 
@@ -111,7 +122,7 @@ th, td {
 
 .heading-all-details {
     text-align: center;
-    font-size: 2.5rem;
+    font-size: 1.5rem;
 }
 
 .upper-conatiner-all-treatment-details {
@@ -127,6 +138,20 @@ th, td {
     height: fit-content;
     margin: auto auto;
     padding: 4rem;
+}
+
+
+.label-show-patient-details-heading {
+    font-size: .88rem;
+    font-weight: 500;
+    margin-left: 10px;
+}
+
+
+.label-show-patient-details-field {
+    font-size: .78rem;
+    font-weight: 500;
+    margin-left: 10px;
 }
 
 
@@ -209,6 +234,29 @@ th, td {
 }
 
 
+
+/*  ::::::::::::::::::::: Add Treatment form between but end is below  ::::::::::::::::::::: */
+
+
+.label-add-trt-show-det-heading {
+    font-weight: 600;
+    font-size: .86rem;
+}
+
+.label-add-trt-show-det-field {
+    font-size: .83rem;
+    font-weight: 400;
+}
+
+.input-vital-class {
+    width: 5rem;
+    padding-left: 10px;
+}
+
+
+
+
+
 /* ----------- Add Treatment form ends ----------- */
 
 
@@ -234,12 +282,20 @@ th, td {
     
     margin: auto auto;
     padding: 2.8rem;
-    width: 40rem;
-    max-width: 40rem;
+    width: 25rem;
+    max-width: 25rem;
     margin: 20px;
 
     
    
+}
+
+.tr-treatment-heading {
+    font-size: .8rem;
+}
+
+.tr-treatment-field {
+    font-size: .75rem;
 }
 
 .text-wrap-for-th {
@@ -252,6 +308,13 @@ th, td {
     background-color: #4bc5b9;
     color: white;
     border-radius: 60px;
+    font-size: .79rem;
+    
+}
+
+.treatment-no-st {
+    border-radius: 60px;
+    font-size: .79rem;
     
 }
 

@@ -35,12 +35,12 @@ body {
     text-align: center;
     display: flex;
     width: 100%;
-    margin-top: 5rem;
+    margin-top: 2rem;
 }
 
 .main-welcome-para {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 140px;
+    font-size: 100px;
     font-weight: 500;
     margin-top: 0;
     margin-bottom: 0px;
@@ -50,7 +50,7 @@ body {
 
 .welcome-para {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 30px;
+    font-size: 20px;
     margin-top: 0;
     margin-left: auto;
     margin-right: auto;
@@ -79,10 +79,10 @@ body {
 }
 
 .container-signin-button {
-    width: 35rem;
+    width: 30rem;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 13%;    
+    margin-top: 10%;    
     text-align: center;
 
     

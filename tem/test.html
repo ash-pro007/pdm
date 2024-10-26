@@ -1,39 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
-    <style>
-        .red {
-            width:680px;
-            height:1000px;
-            background:red;
-        }
-        
-        .blue {
-            width: 25%;
-            display:inline-block;
-            margin-right: -4px;
-            box-sizing: border-box;
-            padding: 1%;
-        }
-        
-        .blue > div {
-            background:blue;
-            height:200px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
 </head>
 <body>
-    <div class="red">
-        <div class="blue"><div>content1</div></div>
-        <div class="blue"><div>content2</div></div>
-        <div class="blue"><div>content3</div></div>
-        <div class="blue"><div>content4</div></div>
-        <div class="blue"><div>content5</div></div>
-        <div class="blue"><div>content6</div></div>
-    </div>
+    <form id="patientImageForm" action="{% url 'upload_patient_image' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Image upload input -->
+        <input type="file" id="imageUpload" name="image" accept="image/*" onchange="previewImage(event)">
+        
+        <!-- Cropping area -->
+        <div style="display: none;" id="cropContainer">
+            <img id="imagePreview" style="max-width: 100%;">
+            <button type="button" onclick="cropImage()">Crop and Upload</button>
+        </div>
+        
+        <!-- Hidden field to store cropped image data -->
+        <input type="hidden" id="croppedImage" name="cropped_image">
+    </form>
+
+    <script>
+        let cropper;
+
+        // Preview and initialize cropper on image upload
+        function previewImage(event) {
+            const imagePreview = document.getElementById('imagePreview');
+            const cropContainer = document.getElementById('cropContainer');
+            imagePreview.src = URL.createObjectURL(event.target.files[0]);
+            cropContainer.style.display = 'block';
+
+            // Initialize Cropper
+            if (cropper) cropper.destroy();
+            cropper = new Cropper(imagePreview, {
+                aspectRatio: 1,  // Ensure symmetrical cropping (1:1 aspect ratio)
+                viewMode: 1,
+            });
+        }
+
+        // Crop image and submit form
+        function cropImage() {
+            if (cropper) {
+                const croppedCanvas = cropper.getCroppedCanvas({
+                    width: 300,
+                    height: 300,
+                });
+
+                // Convert canvas to base64 image data
+                document.getElementById('croppedImage').value = croppedCanvas.toDataURL('image/jpeg');
+                
+                // Submit form
+                document.getElementById('patientImageForm').submit();
+            }
+        }
+    </script>
 </body>
 </html>
+
+
+
+def change_patient_details(request):
+    try:
+        if request.method == "POST":
+            id = str(request.POST['patient_id_to_change_data'])
+
+            name = str(request.POST['name'])
+            gender = str(request.POST['gender'])
+            age = str(request.POST['age'])
+            profile_created_on_or_first_diagnos = str(request.POST['profile_created_on_or_first_diagnos'])
+            problem = str(request.POST['problem'])
+            medical_history = str(request.POST['medical_history'])
+            operation_history = str(request.POST['operation_history'])
+            other_details = str(request.POST['other_details'])
+            contact_no = str(request.POST['contact_no'])
+            address = str(request.POST['address'])
+
+            is_img_changed = True
+
+            try:
+                img = request.FILES['img']
+            except:
+                img = ''
+
+
+            # select query
+
+            pat = Patient.objects.raw(f"""SELECT * FROM public."Data_manager_patient"  WHERE id = '{ patient_id }'  """) 
+            for i in pat:
+                if name == '' or name == None:
+                    name = i.name
+                
+                if gender == '' or gender == None:
+                    gender = i.gender
+
+                if age == '' or age == None:
+                    age = i.age
+
+                if profile_created_on_or_first_diagnos == '' or gender == None:
+                    profile_created_on_or_first_diagnos = '2024-01-01'
+
+                if problem == '' or problem == None:
+                    problem = i.problem
+
+                if medical_history == '' or medical_history == None:
+                    medical_history = i.medical_history
+
+                if operation_history == '' or operation_history == None:
+                    operation_history = i.operation_history
+
+                if other_details == '' or other_details == None:
+                    other_details = i.other_details
+
+                if contact_no == '' or contact_no == None:
+                    contact_no = i.contact_no
+
+                if name == '' or name == None:
+                    name = i.name
+                
+                if img == '' or img == None:
+                    img = i.img
+                    is_img_changed = False
+
+                if address == '' or address == None:
+                    address = i.address
+            
+
+                # change_query = f""" UPDATE public."Data_manager_patient" SET name='{name}', img='{img}', gender='{gender}', age='{age}', problem='{problem}', medical_history='{medical_history}',
+                #                         operation_history='{operation_history}', other_details='{other_details}', contact_no='{contact_no}'  WHERE id={id} """
+                # Patient.objects.raw(change_query, Patient.id)
+                
+                
+                # if img=='':
+                #     Patient.objects.filter(id=id).update(name=name,  gender=gender, age=age, problem=problem, medical_history=medical_history, operation_history=operation_history, other_details=other_details, contact_no=contact_no)
+                # else:
+                #     Patient.objects.filter(id=id).update(name=name, img=img, gender=gender, age=age, problem=problem, medical_history=medical_history, operation_history=operation_history, other_details=other_details, contact_no=contact_no)
+                
+            if is_img_changed:
+                remove_patient_deletion_performer(request, True, False, patient_id)
+            else:
+                remove_patient_deletion_performer(request, False, False, patient_id)
+
+
+            # Adding that same patient in database again
+            patient = Patient(patient_id, name, img, gender, age, problem, medical_history, operation_history, other_details, contact_no, profile_created_on_or_first_diagnos, address)
+
+
+
+            patient.save()
+
+        
+            messages.success(request, "Patient details have been changed")
+
+        else:
+            messages.error(request, "Couldn't change the details save")
+
+    except:
+        messages.error(request, "Couldn't change the patient details. There must be some problem with the given input.")
+
+        # except:
+        #     messages.error(request, "Couldn't change patient details")
+
+    try:
+        patient_all_treatment_details = Patient_treatment_details.objects.raw(f"""SELECT * FROM public."Data_manager_patient_treatment_details" WHERE patient_id = '{ patient_id }' ORDER BY id DESC """)
+    except: 
+        print('No table found!')
+        
+    patients = Patient.objects.all()
+    patients.reverse()
+    return render(request, 'home.html', { 'patients_list': patients})
+
+    

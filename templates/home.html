@@ -21,6 +21,16 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 
+
+    <!-- ---------------- Cooper Libraray for js  ----------------- -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+    <!-- -------------- Cooper Libraray for js ends  -------------- -->
+
+
+
     <style>
         a:hover { text-decoration: none; }
         
@@ -40,20 +50,19 @@
 
                 
                 <a herf="home" style="color: #f44336; font-weight: 500;"  class="hc-navbar-item">Home <i class="fa fa-home" style="font-size:15px"></i></a>
-                <a href="#" onclick="showForm()" class="hc-navbar-item">Add New Patient  +</i> </a>
-                <a href=" {% url 'remove_patient' %}" class="hc-navbar-item">Remove patient  <i class="material-icons" style="font-size:14px">remove_circle_outline</i>  </a>
+                <a href="#" onclick="showForm()" class="hc-navbar-item">Add Patient +</i> </a>
+                <a href=" {% url 'remove_patient' %}" class="hc-navbar-item">Remove patient <i class="material-icons" style="font-size:14px">remove_circle_outline</i>  </a>
                 <a style="color: white;" id="btn-search-patient" onclick="searchPatient()" class="hc-navbar-item"> Search Patient  &#128269</a>
-    
-                <form class="form-search-patient" id="inpt-search-patient" action="{% url 'show_searched_patient' %}" method="post">
-                    {% csrf_token %}
-                    
-                    <input class="input-form-search" type="text" id="searched_name" name="searched_name" placeholder="Search Patient">
-                    <button class="navg-buttons btn-form-search-patient" type="submit">Search</button>   
-                </form>
+                
+                <div class="search-btns-container">
+                    <button id="btn-form-search-patient-by-name-id" class="navg-buttons btn-form-search-patient-by-name" type="submit" onclick="showSearchFormByName()">Search by name</button>   
+                    <button id="btn-form-search-patient-by-date-id" class="navg-buttons btn-form-search-patient-by-date" type="submit" onclick="showSearchFormByDate()">Search by date</button>   
+                </div>
+                
 
                 <a href="#" class="hc-navbar-item">About</a>
 
-                <a style="margin-left: 5rem;" href="signout" class="hc-navbar-item">Logout <i class="fa fa-sign-out" style="font-size:15px"></i></a>
+                <a id="a-logout" style="margin-left: 3rem;" href="signout" class="hc-navbar-item">Logout <i class="fa fa-sign-out" style="font-size:15px"></i></a>
 
                 <a href="#" onclick="chnageGridTableView()" class="hc-navbar-item">C V</i> </a>
 
@@ -61,36 +70,80 @@
         </div>
     </nav>
 
+
+    <!-- 
+
+
+        <form class="form-search-patient" id="inpt-search-patient" action="{% url 'show_searched_patient' %}" method="post">
+            {% csrf_token %}
+            
+            <input class="input-form-search" type="text" id="searched_name" name="searched_name" placeholder="Search Patient">
+            <button class="navg-buttons btn-form-search-patient" type="submit">Search</button>   
+        </form>
+                
+                
+    -->
+
     <!-- ---------------------- Nav bar ends ------------------------ -->
 
     <!-- ---------------------- Some message here ---------------------- -->
 
+ 
+
     {% for message in messages %}
-    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert"> 
-        <strong>Message: </strong> {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"> 
-            <span aria-hidden="true">&times;</span>
-        </button>
+    
+    <div class="alert alert-danger">
+        <a class="close" href="#" data-dismiss="alert">×</a>
+           {{ message }}
     </div>
 
     {% endfor %}
 
     <!-- ---------------------- Message ends here ---------------------- -->
 
-    <!-- ---------------------- Form to register Patient ---------------------- -->
+
+    <!-- ------------------------ Search patient div  ------------------------ -->
+
+    <div class="container-search-main-container">
+        <div class="container-search-by-name-input-field" id="container-search-by-name-input-field-id" >
+            <form class="form-search-patient"  action="{% url 'show_searched_patient' %}" method="post">
+                {% csrf_token %}
+                
+                <input class="input-form-search" type="text" id="searched_name" name="searched_name" placeholder="Search Patient">
+                <button class="btn-form-search-patient" type="submit">Search</button>   
+            </form>
+        </div>
     
-    <div id="patient-registration-form" class="div-form-container" style="display: none;" >
+        <div class="container-search-by-name-input-field" id="container-search-by-date-input-field-id">
+            <form class="form-search-patient"  action="{% url 'show_searched_patient_by_date_range' %}" method="post">
+                {% csrf_token %}
+                
+                <input class="input-form-search input-form-search-by-date-from" type="date" id="input-form-search-by-date-from" name="input-form-search-by-date-from">
+                <input class="input-form-search-by-date-to" type="date" id="input-form-search-by-date-to" name="input-form-search-by-date-to" >
+
+                <button class="btn-form-search-patient btn-form-search-patient-by-date" type="submit">Search</button>   
+            </form>
+        </div>    
+    </div>
+
+
+    <!-- ------------------------ Search patient ends ------------------------ -->
+
+    <!-- ---------------------- Form to register Patient ---------------------- -->
+
+    
+    <!-- <div id="patient-registration-form" class="div-form-container" style="display: none;" >
         <div class="form-heading">Patient Regisration</div>
         <form  action="{% url 'register_patient' %}" method="post" enctype="multipart/form-data" onsubmit="disableButton();" class="form-container-formm">
             {% csrf_token %}
             <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Patient Name</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Enter patient name here">
+                <label for="exampleFormControlInput1" class="mr-2 form-label">Patient Name</label>
+                <input type="text" class=" input-form-register-patient" id="name" name="name" placeholder="Enter patient name here">
             </div>
        
             <div class="mbt-3" style="margin-top: 30px;">
-                <label  class="form-label" for="cars">Gender</label>
-                <select  class="btn btn-primary dropdown-toggle" name="gender" id="gender">
+                <label  class="mr-3 form-label" id="label-gender-section-id" for="cars">Gender</label>
+                <select style="font-size: .79rem;"  class="input-form-register-patient btn btn-primary dropdown-toggle " name="gender" id="gender">
                     <option value="m">Male</option>
                     <option value="f">Female</option>
                     <option value="o">Other</option>
@@ -99,8 +152,13 @@
             </div>
 
             <div  class="mb-3">
-                <label for="startDate">Data of Birth</label>
-                <input id="dob" name="dob" class="form-control" type="date" />
+                <label for="startDate">First appointment/diagnos</label>
+                <input id="profile_created_on_or_first_diagnos" name="profile_created_on_or_first_diagnos" class="form-control" type="date" />
+            </div>
+
+            <div  class="mb-3">
+                <label for="startDate">Age</label>
+                <input id="age" name="age" class="form-control" type="number" max="150" />
             </div>
 
             <div class="mb-3">
@@ -139,7 +197,112 @@
         <div class="btn-hide-regis-form">
             <button type="reset" onclick="hideForm()" class="btn btn-primary mb-4 btn-hide-regis-form">Cancel</button>
         </div>
+    </div> -->
+
+
+
+    <div id="patient-registration-form" class="main-container-register-patient-form" >
+        <div class="form-heading">Patient Regisration Form</div>
+        <div class="secondeary-container-resgister-patinet-form">
+
+            <form id="register-patient-form"  action="{% url 'register_patient' %}" method="post" enctype="multipart/form-data" onsubmit="disableButton();" class="form-container-formm" onchange="previewImage(event)">
+                {% csrf_token %}
+
+                <div class="mb-4 div-container-input">
+                    
+                    <label  class="label-input-register-form">Patient Name</label>
+                    <input type="text" class="inpt-format-register-form" id="name" name="name" placeholder="Enter patient name ">
+
+                    
+                    <label  class="inpt-label-placing label-input-register-form" for="cars">Gender</label>
+                    <select   class="inpt-format-register-form" name="gender" id="gender">
+                        <option value="m">Male</option>
+                        <option value="f">Female</option>
+                        <option value="o">Other</option>
+                    </select>
+                   
+                    <label class="inpt-label-placing label-input-register-form" for="startDate">Age</label>
+                    <input id="age" name="age" class="inpt-format-register-form"  type="number" max="150" />
+                    
+                    <label class="inpt-label-placing label-input-register-form" for="startDate">First appointment/diagnos</label>
+                    <input id="profile_created_on_or_first_diagnos" name="profile_created_on_or_first_diagnos" class="inpt-format-register-form" type="date" />
+            
+                </div>
+
+                <hr>
+
+                <div class="mt-4 mb-4">
+
+                    <label  class=" label-input-register-form">Contact no.</label>
+                    <input max="9999999999999" type="number" class="inpt-format-register-form" id="contact_no" name="contact_no" placeholder="Enter contact no.">
+
+                    <label class="inpt-label-placing label-input-register-form">Patient Address</label>
+                    <input  id="inpt-registration-form-address-id" type="text" class="inpt-format-register-form" id="address" name="address" placeholder="Enter patient address ">
+
+
+                </div>
+
+                <hr>
+
+
+                <div class="mt-4 mb-5 div-container-textarea ">
+
+                    <label  class="label-textarea-register-form">Seeing Doctor for</label>
+                    <textarea class="text-area-inpt-register-form" id="problem" name="problem" rows="3"></textarea>
+              
+                    <label  class="label-textarea-register-form">Medical History</label>
+                    <textarea class="text-area-inpt-register-form" id="medical_history" name="medical_history" rows="3"></textarea>
+            
+                </div>
+                <div  class="mb-5 div-container-textarea ">
+                    <label  class="label-textarea-register-form">Operation History</label>
+                    <textarea class="text-area-inpt-register-form" id="operation_history" name="operation_history" rows="3"></textarea>
+           
+                    <label  class="label-textarea-register-form">Other detials</label>
+                    <textarea class="text-area-inpt-register-form" id="other_details" name="other_details" rows="3"></textarea>
+                </div>
+
+                <hr>
+                
+                <div class="mb-3">
+
+                    <!-- ------------------------------ image previewer  ------------------------------ -->
+
+                    <input type="file" id="imageUpload" name="image" accept="image/*" onchange="previewImage(event)">
+        
+                    <!-- Cropping area -->
+                    <div style="display: none;" id="cropContainer" class="cropped-image-container">
+                        <img id="imagePreview" style="max-width: 100%;">
+                    </div>
+                    
+                    <!-- Hidden field to store cropped image data -->
+                    <input type="hidden" id="croppedImage" name="cropped_image">
+
+                    <!-- --------------------------- image previewer ends  ---------------------------- -->
+                    
+                <hr>
+                  <div class="container-all-form-btns">
+                    
+                    <button style="display: none; border-radius: 50px; margin-right:10rem" id='btn-submit-registration-form-with-image-id' class=" btn btn-primary btn-submit-regis-form register-form-btn-shape" type="button" onclick="cropImage()">Submit</button>
+                      
+
+                    <button id='btn-submit-registration-form-without-image-id' style="border-radius: 50px; " type="button" class="mr-5 btn btn-primary btn-submit-regis-form register-form-btn-shape">Submit</button>
+                    
+
+                    <a href="home" style="border-radius: 50px; margin-left:300px" type="reset"  onclick="hideForm()" class="ml-5 btn btn-warning btn-hide-regis-form register-form-btn-shape">Reset</a>
+                    <button style="border-radius: 50px;" type="reset"  onclick="hideForm()" class="ml-5 btn btn-danger btn-hide-regis-form register-form-btn-shape">Cancel</button>
+                  </div>
+                </div>
+
+            </form>
+    
+
+        </div>
+
     </div>
+
+
+
 
     <!-- ---------------------- Form ends here ---------------------- -->
 
@@ -150,7 +313,7 @@
     <div class="container-gridView-div" id="grid-view-container" style="display: block;">
 
         <table class="table">
-            <thead class="patient-data-thead"> 
+            <thead class="patient-data-thead">
                 <tr>
                     <th>S No.</th>
                     <th>Photo</th>
@@ -159,6 +322,7 @@
                     <th>Contact N0.</th>
                     <th>Gender</th>
                     <th>Dob</th>
+                    <th>Profile Create on</th>
                     <!-- <th>Diagnos</th> -->
                
                     <!-- <th>Other Detail</th> -->
@@ -198,7 +362,10 @@
                             {% endif %}
                         </td>
                         
-                        <td>{{ patient.dob }}</td>
+                        <td>{{ patient.age }}</td>
+
+                        <td>{{ patient.profile_created_on_or_first_diagnos }}</td>
+
                         <!-- <td>{{ patient.problem }}</td> -->
                 
                         <!-- <td>{{ patient.other_details }}</td> -->
@@ -247,9 +414,10 @@
                             Other
                         {% endif %}
                     </td>
-                    <td>{{ patient.dob }}</td>
+                    <td>{{ patient.age }}</td>
                     <!-- <td class="wrap-text-for-td2">{{ patient.problem }}</td> -->
-              
+
+                    <td>{{ patient.profile_created_on_or_first_diagnos }}</td>
                     <!-- <td class="wrap-text-for-td2">{{ patient.other_details }}</td> -->
     
                     <td>
@@ -323,12 +491,17 @@
                             </tr>
                             <tr >
                                 <th class="field-headings">Dob</th>
-                                <td class="field-values">{{ patient.dob }}</td>
+                                <td class="field-values">{{ patient.age }}</td>
                             </tr>
 
                             <tr >
                                 <th class="field-headings">Problem</th>
                                 <td class="field-values">{{ patient.problem }}</td>
+                            </tr>
+
+                            <tr >
+                                <th class="field-headings">Profile Create on</th>
+                                <td class="field-values">{{ patient.profile_created_on_or_first_diagnos }}</td>
                             </tr>
 
                             <tr>
@@ -385,6 +558,45 @@
     <!--  ------------------------- Scripts -------------------------  -->
 
     <script>
+        let cropper;
+
+        // Preview and initialize cropper on image upload
+        function previewImage(event) {
+
+            document.getElementById('btn-submit-registration-form-without-image-id').style.display = 'none';
+            document.getElementById('btn-submit-registration-form-with-image-id').style.display = 'block';
+
+            const imagePreview = document.getElementById('imagePreview');
+            const cropContainer = document.getElementById('cropContainer');
+            imagePreview.src = URL.createObjectURL(event.target.files[0]);
+            cropContainer.style.display = 'block';
+
+            // Initialize Cropper
+            if (cropper) cropper.destroy();
+            cropper = new Cropper(imagePreview, {
+                aspectRatio: 1,  // Ensure symmetrical cropping (1:1 aspect ratio)
+                viewMode: 1,
+            });
+        }
+
+        // Crop image and submit form
+        function cropImage() {
+            if (cropper) {
+                const croppedCanvas = cropper.getCroppedCanvas({
+                    width: 300,
+                    height: 300,
+                });
+
+                // Convert canvas to base64 image data
+                document.getElementById('croppedImage').value = croppedCanvas.toDataURL('image/jpeg');
+                
+                // Submit form
+                document.getElementById('register-patient-form').submit();
+            }
+        }
+    </script>
+
+    <script>
 
         let isRegistrationFormVisible = false
 
@@ -413,7 +625,9 @@
 
         function searchPatient() {
             document.getElementById('btn-search-patient').style.display = 'none';
-            document.getElementById('inpt-search-patient').style.display = 'block';
+            document.getElementById('btn-form-search-patient-by-date-id').style.display = 'inline-block';
+            document.getElementById('btn-form-search-patient-by-name-id').style.display = 'inline-block';
+
 
             document.getElementById('div-view-box-container').style.display = 'none';
             document.getElementById('grid-view-container').style.display = 'block';
@@ -438,6 +652,69 @@
                 display = 'grid';
             }
             
+        }
+
+        let isSearchFormByNameVisible = false;
+        let isSearchFormByDateVisible = false;
+
+        function showSearchFormByName() {
+            if(!isSearchFormByNameVisible) {
+                document.getElementById('container-search-by-date-input-field-id').style.display = 'none';
+                document.getElementById('container-search-by-name-input-field-id').style.display = 'block';
+                document.getElementById('btn-form-search-patient-by-name-id').innerHTML = "Cancel name search";
+                document.getElementById('btn-form-search-patient-by-date-id').innerHTML = "Search by Date";
+
+                document.getElementById('a-logout').style.marginLeft = "2.2rem";
+                
+                isSearchFormByNameVisible = true;
+                isSearchFormByDateVisible = false;
+            }
+            else {
+                document.getElementById('btn-form-search-patient-by-name-id').style.display = 'none';
+                document.getElementById('btn-form-search-patient-by-date-id').style.display = 'none';
+                document.getElementById('btn-search-patient').style.display = 'block';
+
+                document.getElementById('container-search-by-date-input-field-id').style.display = 'none';
+                document.getElementById('container-search-by-name-input-field-id').style.display = 'none';
+
+                document.getElementById('btn-form-search-patient-by-name-id').innerHTML = "Search by name";
+                document.getElementById('btn-form-search-patient-by-date-id').innerHTML = "Search by Date";
+
+
+                document.getElementById('a-logout').style.marginLeft = "3rem";
+
+                isSearchFormByNameVisible = false;
+                isSearchFormByDateVisible = false;
+            }
+        }
+
+       
+        function showSearchFormByDate() {
+            if(!isSearchFormByDateVisible) {
+                document.getElementById('container-search-by-date-input-field-id').style.display = 'block';
+                document.getElementById('container-search-by-name-input-field-id').style.display = 'none';
+                document.getElementById('btn-form-search-patient-by-date-id').innerHTML = "Cancel date search";
+                document.getElementById('btn-form-search-patient-by-name-id').innerHTML = "Search by name";
+
+                document.getElementById('a-logout').style.marginLeft = "2.2rem";
+
+                isSearchFormByNameVisible = false;
+                isSearchFormByDateVisible = true;
+            } else {
+                document.getElementById('btn-form-search-patient-by-name-id').style.display = 'none';
+                document.getElementById('btn-form-search-patient-by-date-id').style.display = 'none';
+                document.getElementById('btn-search-patient').style.display = 'block';
+
+                document.getElementById('container-search-by-date-input-field-id').style.display = 'none';
+                document.getElementById('container-search-by-name-input-field-id').style.display = 'none';
+
+                document.getElementById('btn-form-search-patient-by-name-id').innerHTML = "Search by name";
+                document.getElementById('btn-form-search-patient-by-date-id').innerHTML = "Search by Date";
+
+                document.getElementById('a-logout').style.marginLeft = "3rem";
+                isSearchFormByDateVisible = false;
+                isSearchFormByNameVisible = false;
+            }
         }
 
     </script>

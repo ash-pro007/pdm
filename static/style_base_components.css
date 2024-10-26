@@ -86,36 +86,78 @@
 /* ----------------- from css ----------------- */
 
 .div-form-container {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.form-field {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.form-field:last-child {
+    margin-right: 0;
+}
+
+.form-action {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.form-heading {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+
+/* ----------------------------- */
+
+/* --------------------------------- form css ------------------------------------ */
+
+/* 
+.div-form-container {
+    display: block; 
+    position: fixed; 
+    z-index: 1; 
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(172, 172, 172); /* Fallback color */
-    background-color: rgba(211, 210, 210, 0.4); /* Black w/ opacity */
+    width: 100%; 
+    height: 100%; 
+    overflow: auto;
+    background-color: rgb(172, 172, 172); 
+    background-color: rgba(211, 210, 210, 0.4); 
     padding-top: 60px;
+    font-size: .8rem;
 }
 
 .form-heading {
     color: rgb(56, 56, 56);
     background-color: white;
     font-weight: bold;
-    font-size: 3rem;
+    font-size: 2rem;
     margin-bottom: 3%;
     text-align: center;
     padding: 20px;
 }
 
-/* Modal Content/Box */
+
 .form-container-formm {
     background-color: #fefefe;
-    margin: 5% auto; /* 15% from the top and centered */
+    margin: 5% auto;  
     padding: 20px;
     border-width: 0px;
-    width: 80%; /* Could be more or less, depending on screen size */
+    width: 80%; 
     max-width: 600px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     position: relative;
@@ -123,13 +165,27 @@
     animation-duration: 0.4s;
 }
 
-/* Add Animation */
+.input-form-register-patient {
+    font-size: .79;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+
+}
+
+.input-form-register-patient:focus {
+    border-width: 0px;
+    outline: none;
+     border:none;
+}
+
+
 @keyframes animatetop {
     from {top: -300px; opacity: 0}
     to {top: 0; opacity: 1}
 }
 
-/* The Close Button */
+
 .form-container-formm button[type="button"] {
     background-color: #f44336;
     color: white;
@@ -158,7 +214,178 @@
     text-align: center;
     margin-left: 20%;
 
+}  */
+
+
+
+
+/* ---------------------------------------- Register patient form css --------------------------------------------------- */
+
+.main-container-register-patient-form {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto;
+    background-color: rgb(172, 172, 172); 
+    background-color: rgba(211, 210, 210, 0.4); 
+    padding-top: 60px;
+    font-size: .8rem;
+
+
 }
+
+.form-heading {
+    color: rgb(56, 56, 56);
+    background-color: white;
+    font-weight: bold;
+    font-size: 2rem;
+    margin-bottom: 3%;
+    text-align: center;
+    padding: 20px;
+}
+
+.secondeary-container-resgister-patinet-form {
+    background-color: #fefefe;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 0px;
+    padding: 20px;
+    border-width: 0px;
+    width: 100%;  
+    max-width: 70rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    animation-name: animatetop;
+    animation-duration: .6s;
+    border-radius: 20px;
+    padding: 30px;
+}
+
+
+@keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 0; opacity: 1}
+}
+
+
+.div-container-input {
+    display: block;
+}
+
+
+.label-input-register-form {
+    font-weight: 500;
+    color: rgb(68, 68, 68);
+}
+
+.inpt-label-placing {
+    margin-left: 5rem;
+}
+
+.inpt-format-register-form {
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-left-width: 0px;
+    margin-left: 10px;
+}
+
+.inpt-format-register-form:focus {
+    outline: none;
+    outline-offset: none;
+
+    background-color: inherit;
+    box-shadow: rgba(44, 187, 99, .15) 0 8px 16px,
+                rgba(44, 187, 99, .15) 0 16px 32px;
+   
+}
+
+.inpt-format-register-form:hover {
+    background-color: inherit;
+    box-shadow: rgba(44, 187, 99, .15) 0 8px 16px,
+                rgba(44, 187, 99, .15) 0 16px 32px;
+}
+
+
+#age {
+    width: 50px;
+    padding-left: 10px;
+}
+
+#inpt-registration-form-address-id {
+    width: 35rem;
+}
+
+.div-container-textarea {
+    display: flex;
+}
+
+.text-area-inpt-register-form {
+    border-top-width: 0px;
+    border-right-width: 0px;
+    border-left-width: 0px;
+    width: 25rem;
+    margin-right: 3rem;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-top: 2px;
+    padding-bottom: 5px;
+}
+
+.text-area-inpt-register-form:focus {
+    outline: none;
+    outline-offset: none;
+
+    background-color: inherit;
+    box-shadow: rgba(44, 187, 99, .15) 0 8px 16px,
+                rgba(44, 187, 99, .15) 0 16px 32px;
+}
+
+.text-area-inpt-register-form:hover {
+    outline: none;
+    outline-offset: none;
+
+    background-color: inherit;
+    box-shadow: rgba(44, 187, 99, .15) 0 8px 16px,
+                rgba(44, 187, 99, .15) 0 16px 32px;
+}
+
+.label-textarea-register-form {
+    margin-right: 2.5rem;
+    font-weight: 500;
+    position:initial;
+}
+
+.inpt-patient-image {
+}
+
+.register-form-btn-shape {
+    width: 8rem;
+}
+
+
+
+
+.cropped-image-container {
+    display: flex;
+    margin-right: auto;
+    margin-left: auto;
+    width: 50%;
+}
+
+.container-all-form-btns {
+    display: -webkit-box;
+   
+    margin-top: 3%;
+}
+
+
+
+
+/* -------------------------------------- Register patient form css ends ------------------------------------------------- */
 
 
 /* --------------- from css ends --------------- */
@@ -182,12 +409,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 10px;
+    padding: 8px 8px;
 }
 
 .hc-navbar-brand{
     color: #fff;
-    font-size: 24px;
+    font-size: 25px;
     font-weight: bold;
     text-decoration: none;
     animation: slideIn 1s ease-in-out;
@@ -195,7 +422,7 @@
 
 .hc-navbar-toggler {
     display: none;
-    font-size: 24px;
+    font-size: 20px;
     color: #fff;
     background: none;
     border: none;
@@ -203,10 +430,11 @@
 }
 
 .hc-navbar-menu {
-    margin-left: 14rem;
+    font-size: .8rem;
+    margin-left: 7.5rem;
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 1rem;
     flex: 1;
     transition: transform 0.3s ease-in-out;
 }
@@ -284,41 +512,69 @@
     display: none;
 }
 
-.form-search-patient {
-    margin-top:.7rem;
+#btn-form-search-patient-by-name-id {
+    display: none;
 }
 
-.input-form-search {
-    width: 10rem;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-    padding-left: 20px;
-    margin-right: -5px;
-    border-width: 0px;
+#btn-form-search-patient-by-date-id {
+    display: none;
 }
 
-.input-form-search:focus {
-    outline: none;
+
+.search-btns-container {
+    margin-top: 10px;
+    padding: 0px;
 }
 
-.btn-form-search-patient {
+
+
+
+.btn-form-search-patient-by-date {
+    font-size: .7rem;
+    max-height: fit-content;
+    width: fit-content;
     background-color: white;
     color: #47b3a8;
     font-weight: 600;
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
-    padding-right: 20px;
-    padding-left: 10px;
+
+    padding-right: 10px;
+    padding-left: 5px;
     padding-top: 1px;
     padding-bottom: 1px;
-    margin-top: 2px;
+    margin-top: 5px;
     border-width: 0px;
+
+
 }
 
-.btn-form-search-patient:hover {
+.btn-form-search-patient-by-date:hover {
     background-color: #47b3a8;
     color: #f8f8f8;
 }
+
+
+.btn-form-search-patient-by-name {
+    font-size: .7rem;
+    max-height: fit-content;
+    width: fit-content;
+    background-color: white;
+    color: #47b3a8;
+    font-weight: 600;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    margin-right: 1px;
+    border-width: 0px;
+
+}
+
+.btn-form-search-patient-by-name:hover {
+    background-color: #47b3a8;
+    color: #f8f8f8;
+}
+
+
 
 
 
@@ -332,6 +588,109 @@
     border-radius: 20px;
 }
 
+.container-search-main-container {
+    background-color: #47b3a8;
+    
+}
+
+.container-search-by-name-input-field {
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form-search-patient {
+}
+
+.input-form-search {
+    width: 15rem;
+    height: 1.6rem;
+    font-size: .85rem;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    padding-left: 20px;
+    margin-right: -5px;
+    margin-top: 12px;
+    
+    border-width: 0px;
+
+}
+
+.input-form-search:focus {
+    outline: none;
+}
+
+.btn-form-search-patient {
+    font-size: .85rem;
+    height: 1.64rem;
+    width: 10rem;
+    background-color: white;
+    color: #47b3a8;
+    font-weight: 600;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding-right: 5px;
+    padding-left: 5px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    border-width: 0px;
+    margin-bottom: 12px;
+    margin-left: 2px;
+}
+
+.btn-form-search-patient:hover {
+    font-weight: 600;
+    transform: scale(.9);
+    opacity: .75;
+    background-color: #76d5cb;
+    color: #fff;
+    box-shadow: rgba(44, 187, 163, 0.2) 0 -25px 18px -14px inset,
+                rgba(44, 187, 175, 0.15) 0 1px 2px,rgba(44, 187, 99, .15) 0 2px 4px,
+                rgba(44, 187, 99, .15) 0 4px 8px,rgba(44, 187, 99, .15) 0 8px 16px,
+                rgba(44, 187, 99, .15) 0 16px 32px;
+    border-width: 2px;
+    border-color: white;
+}
+
+#container-search-by-name-input-field-id {
+    display: none;
+}
+
+#container-search-by-date-input-field-id {
+    display: none;
+}
+
+.container-search-by-date-input-field {
+
+}
+
+.input-form-search-by-date-from {
+    width: fit-content;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin-right: 2px;
+}
+
+.input-form-search-by-date-to {
+    width: fit-content;
+    height: 1.6rem;
+    font-size: .85rem;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+    margin-right: 5px;
+    margin-top: 12px;
+    border-width: 0px;
+
+}
+
+.btn-form-search-patient-by-date {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+
+
+}
 
 
 

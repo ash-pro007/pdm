@@ -8,3 +8,15 @@
 2. add symptoms column in db
 
 
+
+3. New 
+
+    - vitals (fields) -> pules, bp, oxygen, weight, vitals (general)
+
+    - profile picture adjustment when uploading 
+
+    - add patient's dignos images
+
+    
+
+
